@@ -4,11 +4,10 @@
     Author     : fuynfactory
 --%>
 
-<%@page import="interjob.webForm.LoginForm"%>
+<%@ page import="interjob.user.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,41 +15,36 @@
         <title>interJob</title>
     </head>  
          <% 
-           LoginForm login =(LoginForm)request.getAttribute("login");
-        %>  
+           String error = (String)request.getAttribute("error");
+           String message = (String)request.getAttribute("message");
+         %>  
 
     <body>
-        <form name="crear" action="LoginServlet" method="post">
+        <% if (error != null) { %>
+        <div style="color: #ff0000; margin-bottom: 5px;">
+            <b>Error:</b> <%=error%>!  
+        </div>
+        <% } else if (message != null) { %>
+        <div style="color: #008000 ; margin-bottom: 5px;">
+            <%=message%>!
+        </div>
+        <% } %>
+        <form name="login" action="LoginServlet" method="post">
             <table border="1">                 
                 <tr>                
-                    <% if (login.isWritelogin()){%>
-                        <td><b>you must write your name loggin</b></td>
-                    <%}%>
-                    <td><b>Login</b></td>
-                    <td><input type="text" name="Login" value="<%=login.getLogin()%>"/></td>
+                    <td><b>Username</b></td>
+                    <td><input type="text" name="username" value=""/></td>
                 </tr>
                 <tr>
-                    <% if (login.isWritepassword()){%>
-                        <td><b>you must write your password</b></td>
-                    <%}%>
                     <td><b>Password</b></td>
-                    <td><input type="password" name="Pasword" value=""/></td>
+                    <td><input type="password" name="password" value=""/></td>
                     
                 </tr> 
                 <tr>
-                    <td colspan="2"><input type="submit" name="btnSave" value="Go"/></td>                    
-                    
-                </tr>
-                <% if (login.isAccessDenied()){%>
-                <tr>
-                        <td><b>Access Denied</b></td>
-                </tr>
-                <%}%>         
-                
-                <tr>
-                <a href="..."> New User</a>
+                    <td colspan="2"><input type="submit" name="btnSave" value="Login"/></td>                    
                 </tr>
             </table>
         </form>
+        <a href="#" style="margin-top:5px;">Register</a>
     </body>
 </html>

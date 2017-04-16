@@ -5,7 +5,6 @@
  */
 package interjob.servlet;
 
-
 import interjob.user.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -18,10 +17,11 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author fuynfactory
+ * @author User
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
+public class LogoutServlet extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,24 +32,28 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");        
+        
         HttpSession session = request.getSession();
-        
         User user = (User)session.getAttribute("user");
-        RequestDispatcher rd;
         
-        if (user == null){
+        if((user != null) && user.isLoggedIn()) {
+            session.invalidate();
+
+            String message = "Logout successfull";
+            request.setAttribute("message", message);
+
+            RequestDispatcher rd;
             rd = this.getServletContext().getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
-        } else {
-            if(user.isLoggedIn()) {    // User logged in before
-                rd = this.getServletContext().getRequestDispatcher("/app.jsp");
-                rd.forward(request, response);
-            } else {
-                rd = this.getServletContext().getRequestDispatcher("/login.jsp");
-                rd.forward(request, response);
-            }
+        }
+        else {  // user not logged in => no logout(-message) necessary
+            session.invalidate();
+            
+            RequestDispatcher rd;
+            rd = this.getServletContext().getRequestDispatcher("/login.jsp");
+            rd.forward(request, response);
         }
     }
 
@@ -79,48 +83,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        User user = new User();
-        
-        RequestDispatcher rd;
-        if(username.equals("") || password.equals("")) {
-            String error = "You have to fill out <b>username</b> and <b>password</b>";
-            request.setAttribute("error", error);
-            
-            rd = this.getServletContext().getRequestDispatcher("/login.jsp");
-            rd.forward(request, response);
-        }
-            
-        /*
-        => user filled out username and password
-        
-        ToDo:
-            - check if username and password are correct!!!
-                - correct:
-                    - fetch userID from the database and set it
-                        => user.setID(userID);
-                    - continue
-                - false: redirect (with "error"-message) to the login form
-                    if("login data wrong") {
-                        String error = "<b>username</b> or <b>password</b> is wrong";
-                        request.setAttribute("error", error);
-        
-                        rd = this.getServletContext().getRequestDispatcher("/login.jsp");
-                        rd.forward(request, response);
-                    }
-        */
-        
-        user.setUsername(username);
-        user.setLoggedIn(true);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-
-        rd = this.getServletContext().getRequestDispatcher("/app.jsp");
-        rd.forward(request, response);
+        processRequest(request, response);
     }
 
     /**
