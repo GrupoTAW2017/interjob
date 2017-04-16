@@ -5,7 +5,7 @@
  */
 package interjob.servlet;
 
-import interjob.user.User;
+import interJob.entity.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author User
+ * @author bluman91
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
 public class LogoutServlet extends HttpServlet {
@@ -38,7 +38,7 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         
-        if((user != null) && user.isLoggedIn()) {
+        if(user != null) {
             session.invalidate();
 
             String message = "Logout successfull";

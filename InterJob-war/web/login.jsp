@@ -4,7 +4,6 @@
     Author     : fuynfactory
 --%>
 
-<%@ page import="interjob.user.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
@@ -45,6 +44,6 @@
                 </tr>
             </table>
         </form>
-        <a href="#" style="margin-top:5px;">Register</a>
+        <a href="#">Register</a>
     </body>
 </html>

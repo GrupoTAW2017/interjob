@@ -5,9 +5,10 @@
  */
 package interjob.servlet;
 
-
-import interjob.user.User;
+import interJob.ejb.UserFacade;
+import interJob.entity.User;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,10 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
+
+    @EJB
+    private UserFacade userFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,16 +45,17 @@ public class LoginServlet extends HttpServlet {
         RequestDispatcher rd;
         
         if (user == null){
+            System.out.println("test");
             rd = this.getServletContext().getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
         } else {
-            if(user.isLoggedIn()) {    // User logged in before
+            //if(user.isLoggedIn()) {    // User logged in before
                 rd = this.getServletContext().getRequestDispatcher("/app.jsp");
                 rd.forward(request, response);
-            } else {
+            /*} else {
                 rd = this.getServletContext().getRequestDispatcher("/login.jsp");
                 rd.forward(request, response);
-            }
+            }*/
         }
     }
 
@@ -80,23 +86,31 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        // get post-parameter
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        User user = new User();
-        
-        RequestDispatcher rd;
+        // check if username or/and password is empty
         if(username.equals("") || password.equals("")) {
             String error = "You have to fill out <b>username</b> and <b>password</b>";
             request.setAttribute("error", error);
             
-            rd = this.getServletContext().getRequestDispatcher("/login.jsp");
+            RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
         }
-            
+        
+        // check if username and password is correct
+        User user = userFacade.loginUser(username, password);
+        if(user == null) {
+            String error = "<b>username</b> or <b>password</b> is wrong";
+            request.setAttribute("error", error);
+        
+            RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/login.jsp");
+            rd.forward(request, response);
+        }
+        
         /*
         => user filled out username and password
-        
         ToDo:
             - check if username and password are correct!!!
                 - correct:
@@ -112,14 +126,11 @@ public class LoginServlet extends HttpServlet {
                         rd.forward(request, response);
                     }
         */
-        
-        user.setUsername(username);
-        user.setLoggedIn(true);
 
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
 
-        rd = this.getServletContext().getRequestDispatcher("/app.jsp");
+        RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/app.jsp");
         rd.forward(request, response);
     }
 

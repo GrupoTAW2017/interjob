@@ -4,7 +4,7 @@
     Author     : bluman91
 --%>
 
-<%@ page import="interjob.user.User"%>
+<%@ page import="interJob.entity.User"%>
 <%@ page session="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -14,14 +14,50 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>interJob - Home</title>
+        <style type="text/css">
+            table {
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            
+            th, td {
+                padding: 5px;
+                text-align: left;
+            }
+        </style>
     </head>
     <% 
         User user = (User)request.getSession().getAttribute("user");
-        String username = user.getUsername();
     %>
     <body>
-        <% if (user.isLoggedIn()) { %>
-            <h1>Login successfull! Hello <%=username%>!</h1>
+        <% if (user != null) { %>
+            <h2>Hello <%=user.getUsername()%>!</h2>
+            <table>
+                <tr>
+                    <td><b>Name:</b></td>
+                    <td><%=user.getName()%></td>
+                </tr>
+                <tr>
+                    <td><b>Last Name:</b></td>
+                    <td><%=user.getLastName()%></td>
+                </tr>
+                <tr>
+                    <td><b>Twitter:</b></td>
+                    <td><%=user.getTwitter()%></td>
+                </tr>
+                <tr>
+                    <td><b>Instagram:</b></td>
+                    <td><%=user.getInstagram()%></td>
+                </tr>
+                <tr>
+                    <td><b>Webpage:</b></td>
+                    <td><%=user.getWebpage()%></td>
+                </tr>
+                <tr>
+                    <td><b>Foto:</b></td>
+                    <td><%=user.getFoto()%></td>
+                </tr>
+            </table>
         <% } %>
     </body>
     <a href="LogoutServlet">Logout</a>

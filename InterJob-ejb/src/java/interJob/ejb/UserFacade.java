@@ -6,6 +6,7 @@
 package interJob.ejb;
 
 import interJob.entity.User;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -41,6 +42,22 @@ public class UserFacade extends AbstractFacade<User> {
         
            
         return userLogin;
+    }
+    
+    public User loginUser (String username, String password) {        
+        Query queryFindByUsernameAndPassword = em.createNamedQuery("User.findByUsernameAndPassword");
+        queryFindByUsernameAndPassword.setParameter("username", username);
+        queryFindByUsernameAndPassword.setParameter("password", password);
+        List<User> users = queryFindByUsernameAndPassword.getResultList();
+        
+        if(users != null) {
+            if(!users.isEmpty() && (users.size() == 1)) {
+                User user = users.get(0);
+                return user;
+            }
+        }
+        
+        return null;
     }
     
 }
