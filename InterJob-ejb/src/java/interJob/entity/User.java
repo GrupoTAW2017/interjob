@@ -26,8 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "USER", catalog = "dbinterjob", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"USERNAME"}),
-    @UniqueConstraint(columnNames = {"ID"})})
+    @UniqueConstraint(columnNames = {"USERNAME"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -46,39 +45,39 @@ public class User implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
-    @Column(name = "USERNAME", nullable = false, length = 20)
+    @Column(name = "USERNAME")
     private String username;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "PASSWORD", nullable = false, length = 50)
+    @Column(name = "PASSWORD")
     private String password;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "NAME", nullable = false, length = 50)
+    @Column(name = "NAME")
     private String name;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "LAST_NAME", nullable = false, length = 50)
+    @Column(name = "LAST_NAME")
     private String lastName;
     @Size(max = 50)
-    @Column(name = "TWITTER", length = 50)
+    @Column(name = "TWITTER")
     private String twitter;
     @Size(max = 50)
-    @Column(name = "INSTAGRAM", length = 50)
+    @Column(name = "INSTAGRAM")
     private String instagram;
     @Size(max = 100)
-    @Column(name = "WEBPAGE", length = 100)
+    @Column(name = "WEBPAGE")
     private String webpage;
     @Size(max = 100)
-    @Column(name = "FOTO", length = 100)
+    @Column(name = "FOTO")
     private String foto;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID")
     private Integer id;
 
     public User() {
@@ -190,7 +189,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.interJob.entity.User[ id=" + id + " ]";
+        return "interJob.entity.User[ id=" + id + " ]";
     }
     
 }
