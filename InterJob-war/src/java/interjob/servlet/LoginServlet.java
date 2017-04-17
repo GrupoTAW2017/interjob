@@ -39,23 +39,18 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {        
         response.setContentType("text/html;charset=UTF-8");        
+        
         HttpSession session = request.getSession();
-        
         User user = (User)session.getAttribute("user");
+
         RequestDispatcher rd;
-        
-        if (user == null){
-            System.out.println("test");
+        if (user == null) {
             rd = this.getServletContext().getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
-        } else {
-            //if(user.isLoggedIn()) {    // User logged in before
-                rd = this.getServletContext().getRequestDispatcher("/app.jsp");
-                rd.forward(request, response);
-            /*} else {
-                rd = this.getServletContext().getRequestDispatcher("/login.jsp");
-                rd.forward(request, response);
-            }*/
+        }
+        else {
+            rd = this.getServletContext().getRequestDispatcher("/app.jsp");
+            rd.forward(request, response);
         }
     }
 
@@ -108,24 +103,6 @@ public class LoginServlet extends HttpServlet {
             RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/login.jsp");
             rd.forward(request, response);
         }
-        
-        /*
-        => user filled out username and password
-        ToDo:
-            - check if username and password are correct!!!
-                - correct:
-                    - fetch userID from the database and set it
-                        => user.setID(userID);
-                    - continue
-                - false: redirect (with "error"-message) to the login form
-                    if("login data wrong") {
-                        String error = "<b>username</b> or <b>password</b> is wrong";
-                        request.setAttribute("error", error);
-        
-                        rd = this.getServletContext().getRequestDispatcher("/login.jsp");
-                        rd.forward(request, response);
-                    }
-        */
 
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
