@@ -5,10 +5,9 @@
  */
 package interjob.servlet;
 
-import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.IOException;
-import javax.ejb.EJB;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,12 +20,9 @@ import javax.servlet.http.HttpSession;
  *
  * @author Francisco Ruiz <pacorf>
  */
-@WebServlet(name = "ProfileServlet", urlPatterns = {"/ProfileServlet"})
-public class ProfileServlet extends HttpServlet {
+@WebServlet(name = "HomeServlet", urlPatterns = {"/HomeServlet"})
+public class HomeServlet extends HttpServlet {
 
-     @EJB
-     UserFacade userFacade;
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,7 +37,8 @@ public class ProfileServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user"); // get current user from session
+        User user = (User)session.getAttribute("user");
+        
         RequestDispatcher rd;
         
         if (user == null) { // If not logged in, go to login
@@ -49,18 +46,6 @@ public class ProfileServlet extends HttpServlet {
             request.setAttribute("error", error);
             rd = this.getServletContext().getRequestDispatcher("/LoginServlet");
             rd.forward(request, response);
-        }
-        
-        int profileId = -1;
-        User profileUser = null;
-        
-        try {
-            profileId = Integer.parseInt(request.getParameter("id")); // user id used for showing profile info.
-            profileUser = userFacade.findUserById(profileId);
-            session.removeAttribute("profileuser");
-            if (profileUser != null) session.setAttribute("profileuser", profileUser);
-        } catch (NumberFormatException e) { // If no parameter, choose logged in user.
-            session.setAttribute("profileuser", user);
         }
         
         rd = this.getServletContext().getRequestDispatcher("/profile.jsp");
