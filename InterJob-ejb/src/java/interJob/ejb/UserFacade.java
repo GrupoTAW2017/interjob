@@ -72,4 +72,19 @@ public class UserFacade extends AbstractFacade<User> {
         return null;
     }
     
+    public User findUserById (int id) {
+        Query queryFindById = em.createNamedQuery("User.findById");
+        queryFindById.setParameter("id", id);
+        List<User> users = queryFindById.getResultList();
+        
+        if (users != null) {
+            if (!users.isEmpty() && (users.size() == 1)) {
+                User user = users.get(0);
+                return user;
+            }
+        }
+        return null;
+    }
+    
+    
 }

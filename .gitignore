@@ -6,3 +6,5 @@ InterJob-war/nbproject/private/private\.properties
 InterJob-ejb/nbproject/private/private\.properties
 /InterJob-war/dist/
 /build/
+/InterJob-ejb/build/
+/InterJob-ejb/dist/
