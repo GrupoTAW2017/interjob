@@ -6,13 +6,13 @@
 -- Insert some USERS
 INSERT INTO `dbinterjob`.`USER`
            (`USERNAME`,`PASSWORD`,`NAME`,`LAST_NAME`,`TWITTER`,`INSTAGRAM`,`WEBPAGE`,`FOTO`)
-    VALUES ('User1','123456','NameOfUser1','LastnameOfUser1','twitter.com/User1', 'instagram.com/User1','User1.abc','User1.jpg');
+    VALUES ('User1','123456','NameOfUser1','LastnameOfUser1','User1', 'User1','User1.abc','User1.jpg');
 INSERT INTO `dbinterjob`.`USER`
            (`USERNAME`,`PASSWORD`,`NAME`,`LAST_NAME`,`TWITTER`,`INSTAGRAM`,`WEBPAGE`,`FOTO`)
-    VALUES ('User2','123456','NameOfUser2','LastnameOfUser2','twitter.com/User2', 'instagram.com/User2','User2.abc','User2.jpg');
+    VALUES ('User2','123456','NameOfUser2','LastnameOfUser2','User2', 'User2','User2.abc','User2.jpg');
 INSERT INTO `dbinterjob`.`USER`
            (`USERNAME`,`PASSWORD`,`NAME`,`LAST_NAME`,`TWITTER`,`INSTAGRAM`,`WEBPAGE`,`FOTO`)
-    VALUES ('User3','123456','NameOfUser3','LastnameOfUser3','twitter.com/User3', 'instagram.com/User3','User3.abc','User3.jpg');
+    VALUES ('User3','123456','NameOfUser3','LastnameOfUser3','User3', 'User3','User3.abc','User3.jpg');
 
 -- Insert some HOBBIES
 INSERT INTO `dbinterjob`.`HOBBY`
