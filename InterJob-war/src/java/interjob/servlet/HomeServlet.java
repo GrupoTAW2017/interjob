@@ -7,7 +7,6 @@ package interjob.servlet;
 
 import interJob.entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,6 +47,7 @@ public class HomeServlet extends HttpServlet {
             rd.forward(request, response);
         }
         
+        request.setAttribute("profileuser", user);
         rd = this.getServletContext().getRequestDispatcher("/profile.jsp");
         rd.forward(request, response);
     }

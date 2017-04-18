@@ -51,16 +51,13 @@ public class ProfileServlet extends HttpServlet {
             rd.forward(request, response);
         }
         
-        int profileId = -1;
-        User profileUser = null;
-        
         try {
-            profileId = Integer.parseInt(request.getParameter("id")); // user id used for showing profile info.
-            profileUser = userFacade.findUserById(profileId);
-            session.removeAttribute("profileuser");
-            if (profileUser != null) session.setAttribute("profileuser", profileUser);
+            Integer profileId = Integer.parseInt(request.getParameter("id")); // user id used for showing profile info.
+            User profileUser = userFacade.findUserById(profileId);
+            if (profileUser != null)
+                request.setAttribute("profileuser", profileUser);
         } catch (NumberFormatException e) { // If no parameter, choose logged in user.
-            session.setAttribute("profileuser", user);
+            request.setAttribute("profileuser", user);
         }
         
         rd = this.getServletContext().getRequestDispatcher("/profile.jsp");

@@ -10,7 +10,7 @@
 <html>
     <%
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
-        User profileUser = (User)request.getSession().getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
+        User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
