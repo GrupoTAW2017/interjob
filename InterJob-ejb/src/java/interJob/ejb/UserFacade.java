@@ -30,20 +30,6 @@ public class UserFacade extends AbstractFacade<User> {
         super(User.class);
     }
     
-    public User loginUser (User user) {
-        User userLogin =null; // new User(); 
-        try { 
-            Query query =
-                getEntityManager().createQuery("SELECT u FROM User u WHERE u.username = :username");
-           query.setParameter("username", user.getUsername());
-        } catch (Exception e){
-            
-        }
-        
-           
-        return userLogin;
-    }
-    
     public User loginUser (String username, String password) {        
         Query queryFindByUsernameAndPassword = em.createNamedQuery("User.findByUsernameAndPassword");
         queryFindByUsernameAndPassword.setParameter("username", username);
@@ -58,6 +44,14 @@ public class UserFacade extends AbstractFacade<User> {
         }
         
         return null;
+    }
+    
+    public List<User> getFriends(Integer UserID) {
+        Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id IN (SELECT (CASE WHEN f.userId != :id THEN f.userId ELSE f.userId1 END) AS userId FROM Friendship f WHERE f.confirmed = 1 AND (f.userId = :id OR f.userId1 = :id))");
+        queryFindFriends.setParameter("id", UserID);
+        List<User> friends = queryFindFriends.getResultList();
+        
+        return friends;
     }
     
 }

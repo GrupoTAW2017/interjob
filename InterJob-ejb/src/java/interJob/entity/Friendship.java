@@ -35,15 +35,15 @@ public class Friendship implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Column(name = "CONFIRMED")
-    private Short confirmed;
+    private int confirmed;
     @Basic(optional = false)
     @NotNull
     @Column(name = "USER_ID")
-    private int userId;
+    private Integer userId;
     @Basic(optional = false)
     @NotNull
     @Column(name = "USER_ID1")
-    private int userId1;
+    private Integer userId1;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -63,27 +63,27 @@ public class Friendship implements Serializable {
         this.userId1 = userId1;
     }
 
-    public Short getConfirmed() {
+    public int getConfirmed() {
         return confirmed;
     }
 
-    public void setConfirmed(Short confirmed) {
+    public void setConfirmed(int confirmed) {
         this.confirmed = confirmed;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getUserId1() {
+    public Integer getUserId1() {
         return userId1;
     }
 
-    public void setUserId1(int userId1) {
+    public void setUserId1(Integer userId1) {
         this.userId1 = userId1;
     }
 

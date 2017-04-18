@@ -59,6 +59,8 @@
                 </tr>
             </table>
         <% } %>
+        <a href="FriendsServlet?id=<%= user.getId() %>">Show Friends</a>
+        <br>
+        <a href="LogoutServlet">Logout</a>
     </body>
-    <a href="LogoutServlet">Logout</a>
 </html>

@@ -12,20 +12,42 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>interJob</title>
+        <style type="text/css">
+            div.info, div.success, div.warning, div.error {
+                margin: 10px 0px;
+                padding:12px;
+            }
+            div.info {
+                color: #00529B;
+                background-color: #BDE5F8;
+            }
+            div.success {
+                color: #4F8A10;
+                background-color: #DFF2BF;
+            }
+            div.warning {
+                color: #9F6000;
+                background-color: #FEEFB3;
+            }
+            div.error {
+                color: #D8000C;
+                background-color: #FFBABA;
+            }
+        </style>    
     </head>  
          <% 
            String error = (String)request.getAttribute("error");
-           String message = (String)request.getAttribute("message");
+           String info = (String)request.getAttribute("info");
          %>  
 
     <body>
         <% if (error != null) { %>
-        <div style="color: #ff0000; margin-bottom: 5px;">
-            <b>Error:</b> <%=error%>!  
+        <div class="error">
+            <b>Error:</b> <%= error %>!  
         </div>
-        <% } else if (message != null) { %>
-        <div style="color: #008000 ; margin-bottom: 5px;">
-            <%=message%>!
+        <% } else if (info != null) { %>
+        <div class="success">
+            <%= info %>!
         </div>
         <% } %>
         <form name="login" action="LoginServlet" method="post">
