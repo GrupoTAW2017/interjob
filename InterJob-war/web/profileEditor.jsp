@@ -1,6 +1,6 @@
 <%-- 
-    Document   : profile
-    Created on : 17-abr-2017, 19:55:31
+    Document   : profileEditor
+    Created on : 18-abr-2017, 19:56:14
     Author     : Francisco Ruiz <pacorf>
 --%>
 
@@ -10,7 +10,6 @@
 <html>
     <%
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
-        User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,13 +24,8 @@
             }
         </style>
         <!-- BOOTSTRAP END -->
-    <% if (profileUser == null) { %>
-        <title>Profile not found!</title>
-    <% } else { %>
-        <title><%=profileUser.getUsername()%>'s Profile</title>
-    <% } %>
+        <title>Edit Profile</title>
     </head>
-    
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
             <div class="container">
@@ -46,7 +40,7 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
-                    <li><a href="<%=application.getContextPath()%>/HomeServlet">Home</a></li>
+                    <li><a href="<%=application.getContextPath()%>/home.jsp">Home</a></li>
                     <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
                     <li><a href="#">EXAMPLE</a></li>
                   </ul>
@@ -55,56 +49,35 @@
         </nav><!-- NAVBAR END -->
         
         <div class="container">
-        <% if (profileUser == null) { %>
-            <h2>Profile not found!</h2>
-        <% } else { %>
-            <h2><%=profileUser.getUsername()%>'s profile</h2>
-            
-            <table><tr>
-            <td>
-                <% if (profileUser.getFoto() != null) { %>
-                    <img src="<%=profileUser.getFoto()%>">
-                <% } %>
-            </td>
-            <td>
-                <table class="table">
-                    <tr>
-                        <td><b>Username:</b></td>
-                        <td><%=profileUser.getUsername()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Name:</b></td>
-                        <td><%=profileUser.getName()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Last Name:</b></td>
-                        <td><%=profileUser.getLastName()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Twitter:</b></td>
-                        <td><a href="http://twitter.com/<%=profileUser.getTwitter()%>"><%=profileUser.getTwitter()%></a></td>
-                    </tr>
-                    <tr>
-                        <td><b>Instagram:</b></td>
-                        <td><a href="https://instagram.com/<%=profileUser.getInstagram()%>"><%=profileUser.getInstagram()%></a></td>
-                    </tr>
-                    <tr>
-                        <td><b>Webpage:</b></td>
-                        <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
-                    </tr>
-                </table>
-                <%
-                    // Check if profileuser is logged in user
-                    if (profileUser.equals(user)) {
-                %>
-                <a href="<%=application.getContextPath()%>/ProfileEditorServlet" class="btn btn-default" role="button">Edit Profile</a>
+            <h1>Edit Profile</h1>
+            <form action="/ProfileEditorServlet">
+                <div class="form-group">
+                    <label for="username">Email address</label>
+                    <input type="text" class="form-control" id="username" placeholder="Please insert a username" value="<%=user.getUsername()%>">
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Please insert an email" value="<%=user.getName()%>">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" placeholder="Please insert your last name" value="<%=user.getLastName()%>">
+                </div>
+                <div class="form-group">
+                    <label for="twitter">Twitter</label>
+                    <input type="text" class="form-control" id="twitter" placeholder="Please insert a Twitter account" value="<%=user.getTwitter()%>">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <input type="text" class="form-control" id="instagram" placeholder="Please insert an Instagram account" value="<%=user.getInstagram()%>">
+                </div>
+                <div class="form-group">
+                    <label for="foto">Photo URL</label>
+                    <input type="text" class="form-control" id="foto" placeholder="Please insert photo URL" value="<%=user.getFoto()%>">
+                </div>
+                <button type="submit" class="btn btn-default">Save</button>
+            </form>
+        </div>
 
-                <%
-                    }
-                %>
-            </td>
-            </tr></table>
-        <% } %>
-    </div>
     </body>
 </html>
