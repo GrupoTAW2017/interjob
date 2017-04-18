@@ -10,6 +10,9 @@
 <html>
     <%
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
+        // Variables for showing errors in the alerts section of the webpage
+        String error = (String)request.getAttribute("error");
+        String info = (String)request.getAttribute("info");
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -22,6 +25,13 @@
             body {
                 padding-top: 50px;
             }
+            .alert-system {
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
+            }
         </style>
         <!-- BOOTSTRAP END -->
         <title>Main Page</title>
@@ -30,25 +40,46 @@
         <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
             <div class="container">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                  <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
-                    <li class="active"><a href="<%=application.getContextPath()%>/home.jsp">Home</a></li>
-                    <li><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
-                    <li><a href="#">EXAMPLE</a></li>
-                  </ul>
+                    <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
+                        <li class="active"><a href="<%=application.getContextPath()%>/HomeServlet">Home</a></li>
+                        <li><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
+                        <li><a href="<%=application.getContextPath()%>/FriendsServlet">Friends</a></li>
+                        <li><a href="#">EXAMPLE</a></li>
+                    </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="<%=application.getContextPath()%>/LogoutServlet">Logout</a></li>
+                        </ul>
                 </div>
-          </div>
+            </div>
         </nav><!-- NAVBAR END -->
         
-        <div class="container">
+            <!-- ALERT SYSTEM -->
+            <%
+                if (error != null) {
+            %>
+                <div class="alert alert-danger alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error:</strong> <%=error%>
+                </div>
+            <% } else if (info != null) {%>
+                <div class="alert alert-info alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Info:</strong> <%=info%>
+                </div>
+            
+            <% }%>
+            <!-- ALERT SYSTEM END -->
+
+            <div class="container">
             <h1>Welcome <%=user.getName()%>!</h1>
         </div>
     </body>

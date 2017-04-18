@@ -8,3 +8,7 @@ InterJob-ejb/nbproject/private/private\.properties
 /build/
 /InterJob-ejb/build/
 /InterJob-ejb/dist/
+/nbproject/private/
+/InterJob-ejb/nbproject/private/
+/InterJob-war/build/
+/dist/

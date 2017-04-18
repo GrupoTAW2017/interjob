@@ -48,7 +48,7 @@ public class HomeServlet extends HttpServlet {
         }
         
         request.setAttribute("profileuser", user);
-        rd = this.getServletContext().getRequestDispatcher("/profile.jsp");
+        rd = this.getServletContext().getRequestDispatcher("/home.jsp");
         rd.forward(request, response);
     }
 

@@ -25,86 +25,90 @@
             }
         </style>
         <!-- BOOTSTRAP END -->
-    <% if (profileUser == null) { %>
+        <% if (profileUser == null) { %>
         <title>Profile not found!</title>
-    <% } else { %>
+        <% } else { %>
         <title><%=profileUser.getUsername()%>'s Profile</title>
-    <% } %>
+        <% } %>
     </head>
-    
+
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
             <div class="container">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                  <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
-                    <li><a href="<%=application.getContextPath()%>/HomeServlet">Home</a></li>
-                    <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
-                    <li><a href="#">EXAMPLE</a></li>
-                  </ul>
+                    <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
+                        <li><a href="<%=application.getContextPath()%>/HomeServlet">Home</a></li>
+                        <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
+                        <li><a href="<%=application.getContextPath()%>/FriendsServlet">Friends</a></li>
+                        <li><a href="#">EXAMPLE</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<%=application.getContextPath()%>/LogoutServlet">Logout</a></li>
+                    </ul>
                 </div>
-          </div>
+            </div>
         </nav><!-- NAVBAR END -->
-        
-        <div class="container">
-        <% if (profileUser == null) { %>
-            <h2>Profile not found!</h2>
-        <% } else { %>
-            <h2><%=profileUser.getUsername()%>'s profile</h2>
-            
-            <table><tr>
-            <td>
-                <% if (profileUser.getFoto() != null) { %>
-                    <img src="<%=profileUser.getFoto()%>">
-                <% } %>
-            </td>
-            <td>
-                <table class="table">
-                    <tr>
-                        <td><b>Username:</b></td>
-                        <td><%=profileUser.getUsername()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Name:</b></td>
-                        <td><%=profileUser.getName()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Last Name:</b></td>
-                        <td><%=profileUser.getLastName()%></td>
-                    </tr>
-                    <tr>
-                        <td><b>Twitter:</b></td>
-                        <td><a href="http://twitter.com/<%=profileUser.getTwitter()%>"><%=profileUser.getTwitter()%></a></td>
-                    </tr>
-                    <tr>
-                        <td><b>Instagram:</b></td>
-                        <td><a href="https://instagram.com/<%=profileUser.getInstagram()%>"><%=profileUser.getInstagram()%></a></td>
-                    </tr>
-                    <tr>
-                        <td><b>Webpage:</b></td>
-                        <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
-                    </tr>
-                </table>
-                <%
-                    // Check if profileuser is logged in user
-                    if (profileUser.equals(user)) {
-                %>
-                <a href="<%=application.getContextPath()%>/ProfileEditorServlet" class="btn btn-default" role="button">Edit Profile</a>
 
-                <%
-                    }
-                %>
-            </td>
-            </tr></table>
-        <% } %>
-    </div>
+        <div class="container">
+            <% if (profileUser == null) { %>
+            <h2>Profile not found!</h2>
+            <% } else { %>
+            <h2><%=profileUser.getUsername()%>'s profile</h2>
+
+            <table><tr>
+                    <td>
+                        <% if (profileUser.getFoto() != null) { %>
+                        <img src="<%=profileUser.getFoto()%>">
+                        <% } %>
+                    </td>
+                    <td>
+                        <table class="table">
+                            <tr>
+                                <td><b>Username:</b></td>
+                                <td><%=profileUser.getUsername()%></td>
+                            </tr>
+                            <tr>
+                                <td><b>Name:</b></td>
+                                <td><%=profileUser.getName()%></td>
+                            </tr>
+                            <tr>
+                                <td><b>Last Name:</b></td>
+                                <td><%=profileUser.getLastName()%></td>
+                            </tr>
+                            <tr>
+                                <td><b>Twitter:</b></td>
+                                <td><a href="http://twitter.com/<%=profileUser.getTwitter()%>"><%=profileUser.getTwitter()%></a></td>
+                            </tr>
+                            <tr>
+                                <td><b>Instagram:</b></td>
+                                <td><a href="https://instagram.com/<%=profileUser.getInstagram()%>"><%=profileUser.getInstagram()%></a></td>
+                            </tr>
+                            <tr>
+                                <td><b>Webpage:</b></td>
+                                <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
+                            </tr>
+                        </table>
+                        <%
+                            // Check if profileuser is logged in user
+                            if (profileUser.equals(user)) {
+                        %>
+                        <a href="<%=application.getContextPath()%>/ProfileEditorServlet" class="btn btn-default" role="button">Edit Profile</a>
+
+                        <%
+                            }
+                        %>
+                    </td>
+                </tr></table>
+                <% } %>
+        </div>
     </body>
 </html>

@@ -106,8 +106,12 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-
-        RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/app.jsp");
+        
+        // Let user know that login was successful
+        String info = "Logged in successfully!";
+        request.setAttribute("info", info);
+        
+        RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/HomeServlet");
         rd.forward(request, response);
     }
 

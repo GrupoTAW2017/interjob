@@ -9,8 +9,8 @@
 <!DOCTYPE html>
 <html>
     <%
-        User user = (User)request.getSession().getAttribute("user"); // Logged in User
-    %>
+        User user = (User) request.getSession().getAttribute("user"); // Logged in User
+%>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- BOOTSTRAP REQUIRED STYLESHEETS AND JS -->
@@ -30,24 +30,28 @@
         <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
             <div class="container">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<%=application.getContextPath()%>">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                  <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
-                    <li><a href="<%=application.getContextPath()%>/home.jsp">Home</a></li>
-                    <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
-                    <li><a href="#">EXAMPLE</a></li>
-                  </ul>
+                    <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
+                        <li><a href="<%=application.getContextPath()%>/home.jsp">Home</a></li>
+                        <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
+                        <li><a href="<%=application.getContextPath()%>/FriendsServlet">Friends</a></li>
+                        <li><a href="#">EXAMPLE</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<%=application.getContextPath()%>/LogoutServlet">Logout</a></li>
+                    </ul>
                 </div>
-          </div>
+            </div>
         </nav><!-- NAVBAR END -->
-        
+
         <div class="container">
             <h1>Edit Profile</h1>
             <form action="/ProfileEditorServlet">
