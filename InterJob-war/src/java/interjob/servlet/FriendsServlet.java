@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import interJob.entity.User;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -57,18 +58,28 @@ public class FriendsServlet extends HttpServlet {
         Integer UserID = Integer.parseInt(request.getParameter("id"));
         
         // check if the UserID is a correct input
-        if(UserID < 0) {
+        if((!UserID.equals((Integer)UserID)) && (UserID < 1)) {
             RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/app.jsp");
             rd.forward(request, response);
         }
         
+        // fetch friends from the database
         List<User> friends = userFacade.getFriends(UserID);
         if(friends == null) {
             String warning = "The user has no friends. :(";
             request.setAttribute("warning", warning);
         }
-        
         request.setAttribute("friends", friends);
+        
+        // fetch username from the database
+        User user = userFacade.getUser(UserID);
+        if(user != null) {
+            request.setAttribute("username", user.getUsername());
+        }
+        else {
+            String error = "The user with the id: " + UserID + " doesn't exist!";
+            request.setAttribute("error", error);
+        }
         
         RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/friends.jsp");
         rd.forward(request, response);

@@ -50,18 +50,27 @@
         </style>
     </head>
     <% 
-        User user = (User)request.getSession().getAttribute("user");
+        //User user = (User)request.getSession().getAttribute("user");
         
+        String username = (String)request.getAttribute("username");
         List<User> friends = (List<User>)request.getAttribute("friends");
+        
+        String error = (String)request.getAttribute("error");
         String warning = (String)request.getAttribute("warning");
     %>
     <body>
         <% if (friends == null) { %>
-        <div class="warning">
-            <%= warning %>
-        </div>
+        <% if (!error.equals("")) { %>
+            <div class="error">
+                <%= error %>
+            </div>
+            <% } else { %>
+            <div class="warning">
+                <%= warning %>
+            </div>
+            <% } %>
         <% } else { %>
-            <h2>Friends of <%=user.getUsername()%>:</h2>
+            <h2>Friends of <%= username %>:</h2>
             <table>
                 <tr>
                     <th>Username</th>
