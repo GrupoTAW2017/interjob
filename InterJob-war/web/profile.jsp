@@ -11,6 +11,9 @@
     <%
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
         User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
+        // Variables for showing errors in the alerts section of the webpage
+        String error = (String)request.getAttribute("error");
+        String info = (String)request.getAttribute("info");
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -22,6 +25,13 @@
         <style>
             body {
                 padding-top: 50px;
+            }
+            .alert-system {
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
             }
         </style>
         <!-- BOOTSTRAP END -->
@@ -57,6 +67,23 @@
                 </div>
             </div>
         </nav><!-- NAVBAR END -->
+        
+        <!-- ALERT SYSTEM -->
+            <%
+                if (error != null) {
+            %>
+                <div class="alert alert-danger alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error:</strong> <%=error%>
+                </div>
+            <% } else if (info != null) {%>
+                <div class="alert alert-info alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Info:</strong> <%=info%>
+                </div>
+            
+            <% }%>
+            <!-- ALERT SYSTEM END -->
 
         <div class="container">
             <% if (profileUser == null) { %>
@@ -102,7 +129,7 @@
                             if (profileUser.equals(user)) {
                         %>
                         <a href="<%=application.getContextPath()%>/ProfileEditorServlet" class="btn btn-default" role="button">Edit Profile</a>
-
+                        <a href="<%=application.getContextPath()%>/PasswordEditorServlet" class="btn btn-default" role="button">Change Password</a>
                         <%
                             }
                         %>

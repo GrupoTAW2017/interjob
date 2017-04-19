@@ -1,6 +1,6 @@
 <%-- 
-    Document   : profileEditor
-    Created on : 18-abr-2017, 19:56:14
+    Document   : passwordEditor
+    Created on : 19-abr-2017, 1:57:57
     Author     : Francisco Ruiz <pacorf>
 --%>
 
@@ -10,7 +10,7 @@
 <html>
     <%
         User user = (User) request.getSession().getAttribute("user"); // Logged in User
-%>
+    %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- BOOTSTRAP REQUIRED STYLESHEETS AND JS -->
@@ -53,33 +53,21 @@
         </nav><!-- NAVBAR END -->
 
         <div class="container">
-            <h1>Edit Profile</h1>
-            <form action="ProfileEditorServlet" method="post">
+            <h1>Change Password</h1>
+            <form action="PasswordEditorServlet" method="post">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" placeholder="Please insert a username" value="<%=user.getUsername()%>">
+                    <label for="old_password">Old Password</label>
+                    <input type="password" class="form-control" name="old_password" placeholder="Please insert old password">
                 </div>
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Please insert a name" value="<%=user.getName()%>">
+                    <label for="new_password">New Password</label>
+                    <input type="password" class="form-control" name="new_password" placeholder="Insert new Pasword">
                 </div>
                 <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" class="form-control" name="last_name" placeholder="Please insert your last name" value="<%=user.getLastName()%>">
+                    <label for="new_password_repeat">Last Name</label>
+                    <input type="password" class="form-control" name="new_password_repeat" placeholder="Repeat new password">
                 </div>
-                <div class="form-group">
-                    <label for="twitter">Twitter</label>
-                    <input type="text" class="form-control" name="twitter" placeholder="Please insert a Twitter account" value="<%=user.getTwitter()%>">
-                </div>
-                <div class="form-group">
-                    <label for="instagram">Instagram</label>
-                    <input type="text" class="form-control" name="instagram" placeholder="Please insert an Instagram account" value="<%=user.getInstagram()%>">
-                </div>
-                <div class="form-group">
-                    <label for="foto">Photo URL</label>
-                    <input type="text" class="form-control" name="foto" placeholder="Please insert photo URL" value="<%=user.getFoto()%>">
-                </div>
-                <button type="submit" class="btn btn-default">Save</button>
+                <button type="submit" class="btn btn-default">Apply</button>
             </form>
         </div>
 

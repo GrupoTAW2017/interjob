@@ -5,8 +5,10 @@
  */
 package interjob.servlet;
 
+import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,9 +21,12 @@ import javax.servlet.http.HttpSession;
  *
  * @author Francisco Ruiz <pacorf>
  */
-@WebServlet(name = "ProfileEditorServlet", urlPatterns = {"/ProfileEditorServlet"})
-public class ProfileEditorServlet extends HttpServlet {
+@WebServlet(name = "PasswordEditorServlet", urlPatterns = {"/PasswordEditorServlet"})
+public class PasswordEditorServlet extends HttpServlet {
 
+    @EJB
+     UserFacade userFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,22 +39,22 @@ public class ProfileEditorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
-
+        
         RequestDispatcher rd;
-
+        
         if (user == null) { // If not logged in, go to login
             String error = "Login first!";
             request.setAttribute("error", error);
             rd = this.getServletContext().getRequestDispatcher("/LoginServlet");
             rd.forward(request, response);
         } else {
-            rd = this.getServletContext().getRequestDispatcher("/profileEditor.jsp");
+            rd = this.getServletContext().getRequestDispatcher("/passwordEditor.jsp");
             rd.forward(request, response);
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,11 +84,11 @@ public class ProfileEditorServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-
+        
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         RequestDispatcher rd;
-
+        
         if (user == null) { // If not logged in, go to login
             String error = "Login first!";
             request.setAttribute("error", error);
@@ -91,49 +96,37 @@ public class ProfileEditorServlet extends HttpServlet {
             rd.forward(request, response);
         } else {
             // Get all form parameters
-            String username = request.getParameter("username");
-            String name = request.getParameter("name");
-            String lastName = request.getParameter("last_name");
-            String twitter = request.getParameter("twitter");
-            String instagram = request.getParameter("instagram");
-            String foto = request.getParameter("foto");
-
-            System.out.println(username);
-            System.out.println(name);
-            System.out.println(lastName);
-            System.out.println(twitter);
-            System.out.println(instagram);
-            System.out.println(foto);
-
-            boolean anyError = false;
-
-            String error = "";
+            String oldPassword = request.getParameter("old_password");
+            String newPassword = request.getParameter("new_password");
+            String newPasswordRepeat = request.getParameter("new_password_repeat");
             
-            if (username.isEmpty()) {
-                anyError = true;
-                error += "<br>Username cannot be empty!";
-            }
-            if (name.isEmpty()) {
-                anyError = true;
-                error += "<br>Name cannot be empty!";
-            }
-            if (lastName.isEmpty()) {
-                anyError = true;
-                error += "<br>Last Name cannot be empty!";
-            }
-
-            if (anyError) {
+            System.out.println(oldPassword);
+            System.out.println(newPassword);
+            System.out.println(newPasswordRepeat);
+            
+            if (user.getPassword().equals(oldPassword)) { // check old password
+                if (newPassword.equals(newPasswordRepeat)) { // check new password
+                    if (!user.getPassword().equals(newPassword)) { // check if old and new password do not match
+                        // SUCCESS
+                        String info = "Password changed sucessfully!";
+                        request.setAttribute("info", info);
+                    } else {
+                        String error = "New password must be different from the old one.";
+                        request.setAttribute("error", error);
+                    }
+                } else {
+                    String error = "New passwords typed do not match.";
+                    request.setAttribute("error", error);
+                }
+            } else {
+                String error = "Old password do not match.";
                 request.setAttribute("error", error);
-            } else { // SUCCESS
-                String info = "Profile saved successfully!";
-                request.setAttribute("info", info);
             }
-
+            
+            rd = this.getServletContext().getRequestDispatcher("/ProfileServlet");
+            rd.forward(request, response);
         }
-
-        rd = this.getServletContext().getRequestDispatcher("/ProfileServlet");
-        rd.forward(request, response);
-
+        
     }
 
     /**
