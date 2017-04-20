@@ -76,6 +76,10 @@
                     <input type="text" class="form-control" name="instagram" placeholder="Please insert an Instagram account" value="<%=user.getInstagram()%>">
                 </div>
                 <div class="form-group">
+                    <label for="webpage">Webpage</label>
+                    <input type="text" class="form-control" name="webpage" placeholder="Please URL" value="<%=user.getWebpage()%>">
+                </div>
+                <div class="form-group">
                     <label for="foto">Photo URL</label>
                     <input type="text" class="form-control" name="foto" placeholder="Please insert photo URL" value="<%=user.getFoto()%>">
                 </div>

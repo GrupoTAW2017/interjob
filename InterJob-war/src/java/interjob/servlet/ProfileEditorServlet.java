@@ -96,6 +96,7 @@ public class ProfileEditorServlet extends HttpServlet {
             String lastName = request.getParameter("last_name");
             String twitter = request.getParameter("twitter");
             String instagram = request.getParameter("instagram");
+            String webpage = request.getParameter("webpage");
             String foto = request.getParameter("foto");
 
             System.out.println(username);
@@ -103,6 +104,7 @@ public class ProfileEditorServlet extends HttpServlet {
             System.out.println(lastName);
             System.out.println(twitter);
             System.out.println(instagram);
+            System.out.println(webpage);
             System.out.println(foto);
 
             boolean anyError = false;
