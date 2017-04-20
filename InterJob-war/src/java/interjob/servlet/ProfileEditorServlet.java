@@ -5,8 +5,10 @@
  */
 package interjob.servlet;
 
+import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +24,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ProfileEditorServlet", urlPatterns = {"/ProfileEditorServlet"})
 public class ProfileEditorServlet extends HttpServlet {
 
+    @EJB
+    private UserFacade userFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -99,14 +104,14 @@ public class ProfileEditorServlet extends HttpServlet {
             String webpage = request.getParameter("webpage");
             String foto = request.getParameter("foto");
 
-            System.out.println(username);
-            System.out.println(name);
-            System.out.println(lastName);
-            System.out.println(twitter);
-            System.out.println(instagram);
-            System.out.println(webpage);
-            System.out.println(foto);
-
+            user.setUsername(username);
+            user.setName(name);
+            user.setLastName(lastName);
+            user.setTwitter(twitter);
+            user.setInstagram(instagram);
+            user.setWebpage(webpage);
+            user.setFoto(foto);
+            
             boolean anyError = false;
 
             String error = "";
@@ -127,6 +132,7 @@ public class ProfileEditorServlet extends HttpServlet {
             if (anyError) {
                 request.setAttribute("error", error);
             } else { // SUCCESS
+                userFacade.edit(user); // UPDATE PROFILE INFORMATION
                 String info = "Profile saved successfully!";
                 request.setAttribute("info", info);
             }

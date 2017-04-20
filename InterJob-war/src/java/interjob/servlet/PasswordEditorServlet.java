@@ -100,14 +100,12 @@ public class PasswordEditorServlet extends HttpServlet {
             String newPassword = request.getParameter("new_password");
             String newPasswordRepeat = request.getParameter("new_password_repeat");
             
-            System.out.println(oldPassword);
-            System.out.println(newPassword);
-            System.out.println(newPasswordRepeat);
-            
             if (user.getPassword().equals(oldPassword)) { // check old password
                 if (newPassword.equals(newPasswordRepeat)) { // check new password
                     if (!user.getPassword().equals(newPassword)) { // check if old and new password do not match
                         // SUCCESS
+                        user.setPassword(newPassword);
+                        userFacade.edit(user);
                         String info = "Password changed sucessfully!";
                         request.setAttribute("info", info);
                     } else {
