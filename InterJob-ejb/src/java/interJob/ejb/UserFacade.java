@@ -62,6 +62,21 @@ public class UserFacade extends AbstractFacade<User> {
         return null;
     }
     
+    public User findByUsername(String username) {
+        Query queryfindByUsername = em.createNamedQuery("User.findByUsername");
+        queryfindByUsername.setParameter("username", username);
+        List<User> users = queryfindByUsername.getResultList();
+        
+        if(users != null) {
+            if(!users.isEmpty() && (users.size() == 1)) {
+                User user = users.get(0);
+                return user;
+            }
+        }
+        
+        return null;
+    }
+    
     public List<User> getFriends(Integer UserID) {
         Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id IN (SELECT (CASE WHEN f.userId != :id THEN f.userId ELSE f.userId1 END) AS userId FROM Friendship f WHERE f.confirmed = 1 AND (f.userId = :id OR f.userId1 = :id))");
         queryFindFriends.setParameter("id", UserID);
