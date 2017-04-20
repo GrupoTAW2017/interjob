@@ -18,6 +18,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
+
     @PersistenceContext(unitName = "InterJob-ejbPU")
     private EntityManager em;
 
