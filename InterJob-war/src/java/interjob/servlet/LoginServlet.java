@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
             rd.forward(request, response);
         }
         else {
-            rd = this.getServletContext().getRequestDispatcher("/app.jsp");
+            rd = this.getServletContext().getRequestDispatcher("/HomeServlet");
             rd.forward(request, response);
         }
     }
