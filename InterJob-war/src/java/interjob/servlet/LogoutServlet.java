@@ -41,7 +41,7 @@ public class LogoutServlet extends HttpServlet {
         if(user != null) {
             session.invalidate();
 
-            String info = "Logout successfull";
+            String info = "Logout successfull!";
             request.setAttribute("info", info);
 
             RequestDispatcher rd;

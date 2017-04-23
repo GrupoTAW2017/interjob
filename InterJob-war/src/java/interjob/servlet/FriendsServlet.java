@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -38,7 +39,66 @@ public class FriendsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {        
-        response.setContentType("text/html;charset=UTF-8");        
+        response.setContentType("text/html;charset=UTF-8");
+        
+        RequestDispatcher rd;
+        
+        User user;
+        Integer UserID = 1;
+        if(!request.getParameterMap().containsKey("id")) {
+            HttpSession session = request.getSession();
+            user = (User) session.getAttribute("user");
+            
+            if (user == null) { // If not logged in, go to login
+                String error = "Login first!";
+                request.setAttribute("error", error);
+                rd = this.getServletContext().getRequestDispatcher("/LoginServlet");
+                rd.forward(request, response);
+            }
+            else {
+                UserID = user.getId();
+                request.setAttribute("ownPage", true);
+                request.setAttribute("username", user.getUsername());
+            }
+        }
+        else {
+            try {
+                UserID = Integer.parseInt(request.getParameter("id"));
+            } catch(NumberFormatException e) {
+                String error = "The User-ID: \"" + request.getParameter("id") + "\" isn't a correct input!";
+                request.setAttribute("error", error);
+                
+                rd = this.getServletContext().getRequestDispatcher("/home.jsp");
+                rd.forward(request, response);
+            }
+        
+            // check if the UserID is a correct input
+            if(UserID < 1) {
+                String error = "The User-ID: \"" + UserID + "\" isn't a correct input!";
+                request.setAttribute("error", error);
+                
+                rd = this.getServletContext().getRequestDispatcher("/home.jsp");
+                rd.forward(request, response);
+            }
+            
+            // fetch username from the database
+            user = userFacade.findUserById(UserID);
+            if(user != null) {
+                request.setAttribute("ownPage", false);
+                request.setAttribute("username", user.getUsername());
+            }
+            else {
+                String error = "A user with the id: \"" + UserID + "\" doesn't exist!";
+                request.setAttribute("error", error);
+            }
+        }
+
+        // fetch friends from the database
+        List<User> friends = userFacade.getFriends(UserID);
+        request.setAttribute("friends", friends);
+        
+        rd = this.getServletContext().getRequestDispatcher("/friends.jsp");
+        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,34 +113,7 @@ public class FriendsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer UserID = Integer.parseInt(request.getParameter("id"));
-        
-        // check if the UserID is a correct input
-        if((!UserID.equals((Integer)UserID)) && (UserID < 1)) {
-            RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/app.jsp");
-            rd.forward(request, response);
-        }
-        
-        // fetch friends from the database
-        List<User> friends = userFacade.getFriends(UserID);
-        if(friends == null) {
-            String warning = "The user has no friends. :(";
-            request.setAttribute("warning", warning);
-        }
-        request.setAttribute("friends", friends);
-        
-        // fetch username from the database
-        User user = userFacade.findUserById(UserID);
-        if(user != null) {
-            request.setAttribute("username", user.getUsername());
-        }
-        else {
-            String error = "The user with the id: " + UserID + " doesn't exist!";
-            request.setAttribute("error", error);
-        }
-        
-        RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/friends.jsp");
-        rd.forward(request, response);
+        processRequest(request, response);
     }
 
     /**
