@@ -95,12 +95,13 @@
             <!-- ALERT SYSTEM END -->
     
         <div class="container">
-            <% if (friends != null) { %>
             <% if(ownPage) { %>
             <h2>My friends</h2>
             <% } else { %>
             <h2>Friends of <%= username %></h2>
             <% } %>
+            <a href="FindFriendServlet" class="btn btn-default">Search Friend</a><br>
+            <% if (friends != null) { %>
             <table class="table table-striped table-responsive">
                 <thead>
                     <tr>
@@ -149,7 +150,7 @@
                 </tbody>
             </table>
             <% } else { %>
-            <h2>The user <%= username %>  has no friends. :( %></h2>
+            The user <%= username %>  has no friends. :(
             <% } %>
          </div>
     </body>

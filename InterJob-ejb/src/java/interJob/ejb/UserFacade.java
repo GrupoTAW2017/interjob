@@ -87,4 +87,14 @@ public class UserFacade extends AbstractFacade<User> {
         
         return null;
     }
+    
+    public List<User> getUserListByUsername(String username) {
+        Query queryFindUsers = em.createQuery("SELECT u FROM User u WHERE u.username LIKE :username");
+        queryFindUsers.setParameter("username", "%" + username + "%");
+        List<User> userList = queryFindUsers.getResultList();
+        
+        if ((userList != null) && !userList.isEmpty()) return userList;
+        
+        return null;
+    }
 }
