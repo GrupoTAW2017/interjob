@@ -14,6 +14,7 @@
         String error = (String)request.getAttribute("error");
         String info = (String)request.getAttribute("info");
         List<User> userList = (List<User>)request.getAttribute("userlist");
+        String username = (String)request.getParameter("username");
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -91,7 +92,8 @@
             <br>
         </div>
         <div class="container">
-            <% if (userList != null && !userList.isEmpty()) { %>
+            <% if (userList != null && !userList.isEmpty() && username.length() > 0) { %>
+            Results for '<%=username%>':
             <table class="table">
                 <tr>
                     <th>Username</th>
@@ -108,6 +110,8 @@
                 </tr>
                 <% } %>
             </table>
+            <% } else if (username != null) { %>
+            No results for '<%=username%>'
             <% } %>
         </div>
     </body>

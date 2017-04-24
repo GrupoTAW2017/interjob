@@ -57,11 +57,8 @@ public class FindFriendServlet extends HttpServlet {
         String username = request.getParameter("username");
         
         if (username != null) {
-            System.out.println("OK " + username);
             userList = userFacade.getUserListByUsername(username);
             request.setAttribute("userlist", userList);
-        } else {
-            System.out.println("ERROR ");
         }
         
         
