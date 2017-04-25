@@ -12,43 +12,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Entity
-@Table(name = "FRIENDSHIP", catalog = "dbinterjob", schema = "")
+@Table(name = "FRIENDSHIP")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Friendship.findAll", query = "SELECT f FROM Friendship f")
     , @NamedQuery(name = "Friendship.findByConfirmed", query = "SELECT f FROM Friendship f WHERE f.confirmed = :confirmed")
-    , @NamedQuery(name = "Friendship.findByUserId", query = "SELECT f FROM Friendship f WHERE f.userId = :userId")
-    , @NamedQuery(name = "Friendship.findByUserId1", query = "SELECT f FROM Friendship f WHERE f.userId1 = :userId1")
     , @NamedQuery(name = "Friendship.findById", query = "SELECT f FROM Friendship f WHERE f.id = :id")})
 public class Friendship implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Column(name = "CONFIRMED")
-    private int confirmed;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_ID")
-    private Integer userId;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_ID1")
-    private Integer userId1;
+    private Short confirmed;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userId;
+    @JoinColumn(name = "USER_ID1", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userId1;
 
     public Friendship() {
     }
@@ -57,34 +54,12 @@ public class Friendship implements Serializable {
         this.id = id;
     }
 
-    public Friendship(Integer id, int userId, int userId1) {
-        this.id = id;
-        this.userId = userId;
-        this.userId1 = userId1;
-    }
-
-    public int getConfirmed() {
+    public Short getConfirmed() {
         return confirmed;
     }
 
-    public void setConfirmed(int confirmed) {
+    public void setConfirmed(Short confirmed) {
         this.confirmed = confirmed;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getUserId1() {
-        return userId1;
-    }
-
-    public void setUserId1(Integer userId1) {
-        this.userId1 = userId1;
     }
 
     public Integer getId() {
@@ -93,6 +68,22 @@ public class Friendship implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
+    public User getUserId1() {
+        return userId1;
+    }
+
+    public void setUserId1(User userId1) {
+        this.userId1 = userId1;
     }
 
     @Override
@@ -117,7 +108,7 @@ public class Friendship implements Serializable {
 
     @Override
     public String toString() {
-        return "interJob.entity.Friendship[ id=" + id + " ]";
+        return "ea.entity.Friendship[ id=" + id + " ]";
     }
     
 }

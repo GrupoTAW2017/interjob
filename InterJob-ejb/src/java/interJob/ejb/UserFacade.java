@@ -78,7 +78,8 @@ public class UserFacade extends AbstractFacade<User> {
     }
     
     public List<User> getFriends(Integer UserID) {
-        Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id IN (SELECT (CASE WHEN f.userId != :id THEN f.userId ELSE f.userId1 END) AS userId FROM Friendship f WHERE f.confirmed = 1 AND (f.userId = :id OR f.userId1 = :id))");
+        //Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id IN (SELECT (CASE WHEN f.userId != :id THEN f.userId ELSE f.userId1 END) AS userId FROM Friendship f WHERE f.confirmed = 1 AND (f.userId = :id OR f.userId1 = :id))");
+        Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id = :id"); // TODO NEEDS CHECK
         queryFindFriends.setParameter("id", UserID);
         List<User> friends = queryFindFriends.getResultList();
         

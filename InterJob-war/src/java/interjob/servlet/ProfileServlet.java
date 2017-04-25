@@ -5,9 +5,11 @@
  */
 package interjob.servlet;
 
+import interJob.ejb.FriendshipFacade;
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.IOException;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,9 +26,12 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ProfileServlet", urlPatterns = {"/ProfileServlet"})
 public class ProfileServlet extends HttpServlet {
 
-     @EJB
-     UserFacade userFacade;
+    @EJB
+    UserFacade userFacade;
     
+    @EJB
+    FriendshipFacade friendshipFacade;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,18 +44,26 @@ public class ProfileServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user"); // get current user from session
+        User user = (User) session.getAttribute("user"); // get current user from session
+        List<User> friendList;
         RequestDispatcher rd;
-        
+
         if (user == null) { // If not logged in, go to login
             String error = "Login first!";
             request.setAttribute("error", error);
             rd = this.getServletContext().getRequestDispatcher("/LoginServlet");
             rd.forward(request, response);
+        } else {
+            // Check friend status
+            friendList = userFacade.getFriends(user.getId());
+            if (friendList != null) {
+                
+            }
+            request.setAttribute("friendstatus", "NO");
         }
-        
+
         try {
             Integer profileId = Integer.parseInt(request.getParameter("id")); // user id used for showing profile info.
             User profileUser = userFacade.findUserById(profileId);
@@ -59,7 +72,7 @@ public class ProfileServlet extends HttpServlet {
         } catch (NumberFormatException e) { // If no parameter, choose logged in user.
             request.setAttribute("profileuser", user);
         }
-        
+
         rd = this.getServletContext().getRequestDispatcher("/profile.jsp");
         rd.forward(request, response);
     }

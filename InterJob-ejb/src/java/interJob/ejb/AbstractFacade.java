@@ -10,16 +10,16 @@ import javax.persistence.EntityManager;
 
 /**
  *
- * @author fuynfactory
+ * @author rassillon
  */
 public abstract class AbstractFacade<T> {
-    private Class<T> entityClass;   
-    
+
+    private Class<T> entityClass;
+
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
-        
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
@@ -60,6 +60,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
     
 }

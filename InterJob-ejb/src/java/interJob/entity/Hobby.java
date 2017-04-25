@@ -6,24 +6,29 @@
 package interJob.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Entity
-@Table(name = "HOBBY", catalog = "dbinterjob", schema = "")
+@Table(name = "HOBBY")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Hobby.findAll", query = "SELECT h FROM Hobby h")
@@ -40,6 +45,11 @@ public class Hobby implements Serializable {
     @Size(max = 100)
     @Column(name = "NAME")
     private String name;
+    @JoinTable(name = "USER_HAS_HOBBY", joinColumns = {
+        @JoinColumn(name = "HOBBY_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
+    @ManyToMany
+    private Collection<User> userCollection;
 
     public Hobby() {
     }
@@ -64,6 +74,15 @@ public class Hobby implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
+    public Collection<User> getUserCollection() {
+        return userCollection;
+    }
+
+    public void setUserCollection(Collection<User> userCollection) {
+        this.userCollection = userCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -86,7 +105,7 @@ public class Hobby implements Serializable {
 
     @Override
     public String toString() {
-        return "interJob.entity.Hobby[ id=" + id + " ]";
+        return "ea.entity.Hobby[ id=" + id + " ]";
     }
     
 }

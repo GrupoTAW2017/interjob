@@ -13,7 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,18 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Entity
-@Table(name = "MESSAGE", catalog = "dbinterjob", schema = "")
+@Table(name = "MESSAGE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m")
     , @NamedQuery(name = "Message.findById", query = "SELECT m FROM Message m WHERE m.id = :id")
     , @NamedQuery(name = "Message.findByDate", query = "SELECT m FROM Message m WHERE m.date = :date")
-    , @NamedQuery(name = "Message.findByRead", query = "SELECT m FROM Message m WHERE m.read = :read")
-    , @NamedQuery(name = "Message.findByUserFrom", query = "SELECT m FROM Message m WHERE m.userFrom = :userFrom")
-    , @NamedQuery(name = "Message.findByUserTo", query = "SELECT m FROM Message m WHERE m.userTo = :userTo")})
+    , @NamedQuery(name = "Message.findByRead", query = "SELECT m FROM Message m WHERE m.read = :read")})
 public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,14 +56,12 @@ public class Message implements Serializable {
     @NotNull
     @Column(name = "READ")
     private short read;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_FROM")
-    private int userFrom;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_TO")
-    private int userTo;
+    @JoinColumn(name = "USER_FROM", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userFrom;
+    @JoinColumn(name = "USER_TO", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userTo;
 
     public Message() {
     }
@@ -72,11 +70,9 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public Message(Integer id, short read, int userFrom, int userTo) {
+    public Message(Integer id, short read) {
         this.id = id;
         this.read = read;
-        this.userFrom = userFrom;
-        this.userTo = userTo;
     }
 
     public Integer getId() {
@@ -111,19 +107,19 @@ public class Message implements Serializable {
         this.read = read;
     }
 
-    public int getUserFrom() {
+    public User getUserFrom() {
         return userFrom;
     }
 
-    public void setUserFrom(int userFrom) {
+    public void setUserFrom(User userFrom) {
         this.userFrom = userFrom;
     }
 
-    public int getUserTo() {
+    public User getUserTo() {
         return userTo;
     }
 
-    public void setUserTo(int userTo) {
+    public void setUserTo(User userTo) {
         this.userTo = userTo;
     }
 
@@ -149,7 +145,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "interJob.entity.Message[ id=" + id + " ]";
+        return "ea.entity.Message[ id=" + id + " ]";
     }
     
 }

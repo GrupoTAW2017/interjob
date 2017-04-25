@@ -13,21 +13,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Entity
-@Table(name = "WORK_EXPERIENCE", catalog = "dbinterjob", schema = "")
+@Table(name = "WORK_EXPERIENCE")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "WorkExperience.findAll", query = "SELECT w FROM WorkExperience w")
@@ -36,8 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WorkExperience.findByEndDate", query = "SELECT w FROM WorkExperience w WHERE w.endDate = :endDate")
     , @NamedQuery(name = "WorkExperience.findByBusiness", query = "SELECT w FROM WorkExperience w WHERE w.business = :business")
     , @NamedQuery(name = "WorkExperience.findByJob", query = "SELECT w FROM WorkExperience w WHERE w.job = :job")
-    , @NamedQuery(name = "WorkExperience.findByWebpage", query = "SELECT w FROM WorkExperience w WHERE w.webpage = :webpage")
-    , @NamedQuery(name = "WorkExperience.findByUserId", query = "SELECT w FROM WorkExperience w WHERE w.userId = :userId")})
+    , @NamedQuery(name = "WorkExperience.findByWebpage", query = "SELECT w FROM WorkExperience w WHERE w.webpage = :webpage")})
 public class WorkExperience implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,21 +61,15 @@ public class WorkExperience implements Serializable {
     @Size(max = 100)
     @Column(name = "WEBPAGE")
     private String webpage;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_ID")
-    private int userId;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userId;
 
     public WorkExperience() {
     }
 
     public WorkExperience(Integer id) {
         this.id = id;
-    }
-
-    public WorkExperience(Integer id, int userId) {
-        this.id = id;
-        this.userId = userId;
     }
 
     public Integer getId() {
@@ -126,11 +120,11 @@ public class WorkExperience implements Serializable {
         this.webpage = webpage;
     }
 
-    public int getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
@@ -156,7 +150,7 @@ public class WorkExperience implements Serializable {
 
     @Override
     public String toString() {
-        return "interJob.entity.WorkExperience[ id=" + id + " ]";
+        return "ea.entity.WorkExperience[ id=" + id + " ]";
     }
     
 }

@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Stateless
 public class HobbyFacade extends AbstractFacade<Hobby> {

@@ -13,30 +13,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author rassillon
  */
 @Entity
-@Table(name = "STUDIES", catalog = "dbinterjob", schema = "")
+@Table(name = "STUDIES")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Studies.findAll", query = "SELECT s FROM Studies s")
     , @NamedQuery(name = "Studies.findByStartDate", query = "SELECT s FROM Studies s WHERE s.startDate = :startDate")
     , @NamedQuery(name = "Studies.findByEndDate", query = "SELECT s FROM Studies s WHERE s.endDate = :endDate")
     , @NamedQuery(name = "Studies.findByLocation", query = "SELECT s FROM Studies s WHERE s.location = :location")
-    , @NamedQuery(name = "Studies.findById", query = "SELECT s FROM Studies s WHERE s.id = :id")
-    , @NamedQuery(name = "Studies.findByUserId", query = "SELECT s FROM Studies s WHERE s.userId = :userId")})
+    , @NamedQuery(name = "Studies.findById", query = "SELECT s FROM Studies s WHERE s.id = :id")})
 public class Studies implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,21 +58,15 @@ public class Studies implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "USER_ID")
-    private int userId;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private User userId;
 
     public Studies() {
     }
 
     public Studies(Integer id) {
         this.id = id;
-    }
-
-    public Studies(Integer id, int userId) {
-        this.id = id;
-        this.userId = userId;
     }
 
     public Date getStartDate() {
@@ -115,11 +109,11 @@ public class Studies implements Serializable {
         this.id = id;
     }
 
-    public int getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
@@ -145,7 +139,7 @@ public class Studies implements Serializable {
 
     @Override
     public String toString() {
-        return "interJob.entity.Studies[ id=" + id + " ]";
+        return "ea.entity.Studies[ id=" + id + " ]";
     }
     
 }

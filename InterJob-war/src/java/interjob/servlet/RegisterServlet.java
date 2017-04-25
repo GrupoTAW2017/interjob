@@ -97,6 +97,7 @@ public class RegisterServlet extends HttpServlet {
             request.setAttribute("error", error);
             rd = this.getServletContext().getRequestDispatcher("/register.jsp");
             rd.forward(request, response);
+            return;
         }
         userFacade.create(newUser);
         
