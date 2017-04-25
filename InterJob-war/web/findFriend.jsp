@@ -14,6 +14,7 @@
         String error = (String)request.getAttribute("error");
         String info = (String)request.getAttribute("info");
         List<User> userList = (List<User>)request.getAttribute("userlist");
+        List<User> friendList = (List<User>)request.getAttribute("friendlist");
         String username = (String)request.getParameter("username");
     %>
     <head>
@@ -103,10 +104,16 @@
                 </tr>
                 <% for(User u: userList) { %>
                 <tr>
-                    <td><%=u.getUsername()%></td>
+                    <td><a href="ProfileServlet?id=<%=u.getId()%>"><%=u.getUsername()%></a></td>
                     <td><%=u.getName()%></td>
                     <td><%=u.getLastName()%></td>
-                    <td><a href="#" class="btn btn-default">Add</a>
+                    <td><% if (!friendList.contains(u)) { %>
+                        <a href="#" title="Send Friend Request">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+                        <% } %>
+                    </td>
+                            
                 </tr>
                 <% } %>
             </table>

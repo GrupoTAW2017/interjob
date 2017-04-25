@@ -8,7 +8,6 @@ package interjob.servlet;
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -46,6 +45,7 @@ public class FindFriendServlet extends HttpServlet {
         RequestDispatcher rd;
         User user = (User)session.getAttribute("user");
         List<User> userList;
+        List<User> friendList;
 
         if (user == null) { // If not logged in, go to login
             String error = "Login first!";
@@ -59,6 +59,9 @@ public class FindFriendServlet extends HttpServlet {
         if (username != null) {
             userList = userFacade.getUserListByUsername(username);
             request.setAttribute("userlist", userList);
+            
+            friendList = userFacade.getFriends(user.getId()); // Get my friends
+            request.setAttribute("friendlist", friendList);
         }
         
         
