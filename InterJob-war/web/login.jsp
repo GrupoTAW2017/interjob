@@ -93,7 +93,7 @@
             <form class="form-login" name="login" action="LoginServlet" method="post">
                 <h2 class="form-login">Login</h2>
                 <label for="username">Username</label>
-                <input type="text" name="username" class="form-control">
+                <input type="text" name="username" class="form-control" autofocus>
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control">
                 <br>
