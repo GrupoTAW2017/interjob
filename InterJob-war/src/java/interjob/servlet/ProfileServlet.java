@@ -9,9 +9,11 @@ import interJob.ejb.FriendshipFacade;
 import interJob.ejb.HobbyFacade;
 import interJob.ejb.StudiesFacade;
 import interJob.ejb.UserFacade;
+import interJob.ejb.WorkExperienceFacade;
 import interJob.entity.Hobby;
 import interJob.entity.Studies;
 import interJob.entity.User;
+import interJob.entity.WorkExperience;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,18 +32,21 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ProfileServlet", urlPatterns = {"/ProfileServlet"})
 public class ProfileServlet extends HttpServlet {
-
-    @EJB
-    UserFacade userFacade;
     
     @EJB
     FriendshipFacade friendshipFacade;
     
     @EJB
+    HobbyFacade hobbyFacade;
+    
+    @EJB
     StudiesFacade studiesFacade;
     
     @EJB
-    HobbyFacade hobbyFacade;
+    UserFacade userFacade;
+    
+    @EJB
+    WorkExperienceFacade workExperienceFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -83,6 +88,9 @@ public class ProfileServlet extends HttpServlet {
                 // find studies
                 List<Studies> studies = studiesFacade.findStudiesByUser(profileUser);
                 request.setAttribute("studies", studies);
+                // find work experiences
+                List<WorkExperience> workExperiences = workExperienceFacade.findWorkExperiencesByUser(profileUser);
+                request.setAttribute("workExperiences", workExperiences);
                 // find hobbies
                 List<Hobby> hobbies = hobbyFacade.findHobbiesByUser(profileUser);
                 request.setAttribute("hobbies", hobbies);
@@ -92,6 +100,9 @@ public class ProfileServlet extends HttpServlet {
             // find studies
             List<Studies> studies = studiesFacade.findStudiesByUser(user);
             request.setAttribute("studies", studies);
+            // find work experiences
+            List<WorkExperience> workExperiences = workExperienceFacade.findWorkExperiencesByUser(user);
+            request.setAttribute("workExperiences", workExperiences);
             // find hobbies
             List<Hobby> hobbies = hobbyFacade.findHobbiesByUser(user);
             request.setAttribute("hobbies", hobbies);

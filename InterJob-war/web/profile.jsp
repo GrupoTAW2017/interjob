@@ -7,6 +7,7 @@
 <%@ page import="interJob.entity.Hobby" %>
 <%@ page import="interJob.entity.Studies" %>
 <%@ page import="interJob.entity.User" %>
+<%@ page import="interJob.entity.WorkExperience" %>
 <%@ page import="java.util.List;" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
@@ -17,6 +18,7 @@
         User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
         List<Hobby> hobbies = (List<Hobby>) request.getAttribute("hobbies");
         List<Studies> studies = (List<Studies>) request.getAttribute("studies");
+        List<WorkExperience> workExperiences = (List<WorkExperience>) request.getAttribute("workExperiences");
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
         
@@ -31,6 +33,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Social Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body {
                 padding-top: 50px;
@@ -43,8 +47,22 @@
                 right: 0;
             }
             
+            table {
+                margin-top: 10px;
+            }
+            
             ul.infoList {
                 padding-left: 10px;
+            }
+            a.socialIcon {
+                font-size: 24px;
+                text-decoration: none;
+            }
+            a.fa-twitter {
+                color: #00aced;
+            }
+            a.fa-instagram {
+                color: #bc2a8d;
             }
         </style>
         <!-- BOOTSTRAP END -->
@@ -109,7 +127,7 @@
             <% }%>
             <!-- ALERT SYSTEM END -->
 
-        <div class="container">
+        <div class="container" style="margin-bottom: 30px;">
             <% if (profileUser == null) { %>
             <h2>Profile not found!</h2>
             <% } else { %>
@@ -124,28 +142,12 @@
                     <td>
                         <table class="table">
                             <tr>
-                                <td><b>Username:</b></td>
-                                <td><%=profileUser.getUsername()%></td>
-                            </tr>
-                            <tr>
                                 <td><b>Name:</b></td>
                                 <td><%=profileUser.getName()%></td>
                             </tr>
                             <tr>
                                 <td><b>Last Name:</b></td>
                                 <td><%=profileUser.getLastName()%></td>
-                            </tr>
-                            <tr>
-                                <td><b>Twitter:</b></td>
-                                <td><a href="http://twitter.com/<%=profileUser.getTwitter()%>"><%=profileUser.getTwitter()%></a></td>
-                            </tr>
-                            <tr>
-                                <td><b>Instagram:</b></td>
-                                <td><a href="https://instagram.com/<%=profileUser.getInstagram()%>"><%=profileUser.getInstagram()%></a></td>
-                            </tr>
-                            <tr>
-                                <td><b>Webpage:</b></td>
-                                <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
                             </tr>
                             <tr>
                                 <td><b>Studies:</b></td>
@@ -155,7 +157,29 @@
                                 <% } else { %>
                                     <ul class="infoList">
                                     <% for(Studies s : studies) { %>
+                                        <% if(s.getEndDate() == null) { %>
+                                        <li><%= dateFormat.format(s.getStartDate()) %> - today: <%= s.getDescription() %> (<%= s.getLocation() %>)</li>
+                                        <% } else { %>
                                         <li><%= dateFormat.format(s.getStartDate()) %> - <%= dateFormat.format(s.getEndDate()) %>: <%= s.getDescription() %> (<%= s.getLocation() %>)</li>
+                                        <% } %>
+                                    <% } %>
+                                    </ul>
+                                <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Work Experiences:</b></td>
+                                <td>
+                                <% if(workExperiences.size() == 0) { %>
+                                    <i>no work experiences</i>
+                                <% } else { %>
+                                    <ul class="infoList">
+                                    <% for(WorkExperience w : workExperiences) { %>
+                                        <% if(w.getEndDate() == null) { %>
+                                        <li><%= dateFormat.format(w.getStartDate()) %> - today: <%= w.getJob() %> (<a href="http://<%= w.getWebpage() %>"><%= w.getBusiness() %></a>)</li>
+                                        <% } else { %>
+                                        <li><%= dateFormat.format(w.getStartDate()) %> - <%= dateFormat.format(w.getEndDate()) %>: <%= w.getJob() %> (<a href="http://<%= w.getWebpage() %>"><%= w.getBusiness() %></a>)</li>
+                                        <% } %>
                                     <% } %>
                                     </ul>
                                 <% } %>
@@ -175,6 +199,25 @@
                                 <% } %>
                                 </td>
                             </tr>
+                            <% if(!profileUser.getWebpage().equals("")) { %>
+                            <tr>
+                                <td><b>Webpage:</b></td>
+                                <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
+                            </tr>
+                            <% } %>
+                            <% if(!profileUser.getTwitter().equals("") || !profileUser.getInstagram().equals("")) { %>
+                            <tr>
+                                <td><b>Social Media:</b></td>
+                                <td>
+                                    <% if(!profileUser.getTwitter().equals("")) { %>
+                                    <a href="https://twitter.com/<%= profileUser.getTwitter() %>" class="fa fa-twitter socialIcon" title="Twitter"></a>
+                                    <% } %>
+                                    <% if(!profileUser.getInstagram().equals("")) { %>
+                                    <a href="https://instagram.com/<%= profileUser.getInstagram()%>" class="fa fa-instagram socialIcon" title="Instagram"></a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% } %>
                         </table>
                         <%
                             // Check if profileuser is logged in user

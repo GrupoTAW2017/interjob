@@ -35,11 +35,11 @@ public class StudiesFacade extends AbstractFacade<Studies> {
     }
     
     public List<Studies> findStudiesByUser(User user) {
-        Query queryFindHobbyByUser = em.createQuery("SELECT s "
-                                                  + "FROM Studies s "
-                                                  + "WHERE s.userId = :user "
-                                                  + "ORDER BY s.startDate DESC");
-        queryFindHobbyByUser.setParameter("user", user);
-        return queryFindHobbyByUser.getResultList();
+        Query queryFindStudiesByUser = em.createQuery("SELECT s "
+                                                    + "FROM Studies s "
+                                                    + "WHERE s.userId = :user "
+                                                    + "ORDER BY s.startDate DESC");
+        queryFindStudiesByUser.setParameter("user", user);
+        return queryFindStudiesByUser.getResultList();
     }
 }

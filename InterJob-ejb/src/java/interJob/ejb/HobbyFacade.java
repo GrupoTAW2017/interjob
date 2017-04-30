@@ -34,11 +34,11 @@ public class HobbyFacade extends AbstractFacade<Hobby> {
     }
     
     public List<Hobby> findHobbiesByUser(User user) {
-        Query queryFindHobbyByUser = em.createQuery("SELECT h "
-                                                  + "FROM Hobby h "
-                                                  + "WHERE :user MEMBER OF h.userCollection");
-        queryFindHobbyByUser.setParameter("user", user);
-        return queryFindHobbyByUser.getResultList();
+        Query queryFindHobbiesByUser = em.createQuery("SELECT h "
+                                                    + "FROM Hobby h "
+                                                    + "WHERE :user MEMBER OF h.userCollection");
+        queryFindHobbiesByUser.setParameter("user", user);
+        return queryFindHobbiesByUser.getResultList();
     }
     
 }
