@@ -139,7 +139,7 @@
                         </td>
                         <% if(ownPage) { %>
                         <td>
-                            <a href="#" title="Delete Friendship">
+                            <a href="#" title="Delete friendship">
                                 <span class="glyphicon glyphicon-trash"></span> 
                             </a>
                         </td>

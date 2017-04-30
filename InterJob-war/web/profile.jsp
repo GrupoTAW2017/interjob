@@ -57,7 +57,18 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
                         <li><a href="<%=application.getContextPath()%>/HomeServlet">Home</a></li>
+                        <%
+                            // Check if profileuser is logged in user
+                            if (profileUser.equals(user)) {
+                        %>
                         <li class="active"><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
+                        <%
+                            } else {
+                        %>
+                        <li><a href="<%=application.getContextPath()%>/ProfileServlet">My Profile</a></li>
+                        <%
+                            }
+                        %>
                         <li><a href="<%=application.getContextPath()%>/FriendsServlet">Friends</a></li>
                         <li><a href="#">EXAMPLE</a></li>
                     </ul>
@@ -130,6 +141,10 @@
                         %>
                         <a href="<%=application.getContextPath()%>/ProfileEditorServlet" class="btn btn-default" role="button">Edit Profile</a>
                         <a href="<%=application.getContextPath()%>/PasswordEditorServlet" class="btn btn-default" role="button">Change Password</a>
+                        <%
+                            } else {
+                        %>
+                        <a href="<%=application.getContextPath()%>/FriendsServlet?id=<%= profileUser.getId() %>" class="btn btn-default" role="button">Show his/her Friends</a>
                         <%
                             }
                         %>

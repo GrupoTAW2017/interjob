@@ -78,9 +78,14 @@ public class UserFacade extends AbstractFacade<User> {
     }
     
     public List<User> getFriends(Integer UserID) {
-        //Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id IN (SELECT (CASE WHEN f.userId != :id THEN f.userId ELSE f.userId1 END) AS userId FROM Friendship f WHERE f.confirmed = 1 AND (f.userId = :id OR f.userId1 = :id))");
-        Query queryFindFriends = em.createQuery("SELECT u FROM User u WHERE u.id = :id"); // TODO NEEDS CHECK
-        queryFindFriends.setParameter("id", UserID);
+        Query queryFindFriends = em.createNativeQuery("SELECT u.* "
+                                                    + "FROM User AS u "
+                                                    + "WHERE u.id IN (SELECT (CASE WHEN f.USER_ID != ?1 THEN f.USER_ID "
+                                                                                + "ELSE f.USER_ID1 END) AS userId "
+                                                                   + "FROM Friendship AS f "
+                                                                   + "WHERE f.confirmed = 1 "
+                                                                     + "AND (f.USER_ID = ?1 OR f.USER_ID1 = ?1))", User.class);
+        queryFindFriends.setParameter(1, UserID);
         List<User> friends = queryFindFriends.getResultList();
         
         if((friends != null) && !friends.isEmpty())
