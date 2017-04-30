@@ -6,9 +6,13 @@
 package interJob.ejb;
 
 import interJob.entity.Hobby;
+import interJob.entity.User;
+
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +31,20 @@ public class HobbyFacade extends AbstractFacade<Hobby> {
 
     public HobbyFacade() {
         super(Hobby.class);
+    }
+    
+    public List<Hobby> findHobbyByUser(User user) {
+        Query queryFindHobbyByUser = em.createQuery("SELECT h "
+                                                  + "FROM Hobby h "
+                                                  + "WHERE :user MEMBER OF h.userCollection");
+        queryFindHobbyByUser.setParameter("user", user);
+        List<Hobby> hobbies = queryFindHobbyByUser.getResultList();
+        
+        for(Hobby h : hobbies) {
+            System.out.println(h.getName() + "\n");
+        }
+        
+        return hobbies;
     }
     
 }

@@ -6,8 +6,10 @@
 package interjob.servlet;
 
 import interJob.ejb.FriendshipFacade;
+import interJob.ejb.HobbyFacade;
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
+import interJob.entity.Hobby;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -31,6 +33,9 @@ public class ProfileServlet extends HttpServlet {
     
     @EJB
     FriendshipFacade friendshipFacade;
+    
+    @EJB
+    HobbyFacade hobbyFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,12 +72,19 @@ public class ProfileServlet extends HttpServlet {
         try {
             Integer profileId = Integer.parseInt(request.getParameter("id")); // user id used for showing profile info.
             User profileUser = userFacade.findUserById(profileId);
-            if (profileUser != null)
+            if (profileUser != null) {
                 request.setAttribute("profileuser", profileUser);
+                // get hobbies
+                List<Hobby> hobbies = hobbyFacade.findHobbyByUser(profileUser);
+                request.setAttribute("hobbies", hobbies);
+            }
         } catch (NumberFormatException e) { // If no parameter, choose logged in user.
             request.setAttribute("profileuser", user);
+            // get hobbies
+            List<Hobby> hobbies = hobbyFacade.findHobbyByUser(user);
+            request.setAttribute("hobbies", hobbies);
         }
-
+        
         rd = this.getServletContext().getRequestDispatcher("/profile.jsp");
         rd.forward(request, response);
     }

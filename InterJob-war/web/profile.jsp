@@ -4,13 +4,17 @@
     Author     : Francisco Ruiz <pacorf>
 --%>
 
-<%@page import="interJob.entity.User"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="interJob.entity.User" %>
+<%@ page import="interJob.entity.Hobby" %>
+<%@ page import="java.util.List;" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <%
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
         User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
+        List<Hobby> hobbies = (List<Hobby>) request.getAttribute("hobbies");
+        
         // Variables for showing errors in the alerts section of the webpage
         String error = (String)request.getAttribute("error");
         String info = (String)request.getAttribute("info");
@@ -32,6 +36,10 @@
                 margin-right: auto;
                 left: 0;
                 right: 0;
+            }
+            
+            ul#hobbies {
+                padding-left: 10px;
             }
         </style>
         <!-- BOOTSTRAP END -->
@@ -133,6 +141,20 @@
                             <tr>
                                 <td><b>Webpage:</b></td>
                                 <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
+                            </tr>
+                            <tr>
+                                <td><b>Hobbies:</b></td>
+                                <td>
+                                <% if(hobbies.size() == 0) { %>
+                                <i>no hobbies</i>
+                                <% } else { %>
+                                    <ul id="hobbies">
+                                    <% for(Hobby h : hobbies) { %>
+                                        <li><%= h.getName() %></li>
+                                    <% } %>
+                                    </ul>
+                                <% } %>
+                                </td>
                             </tr>
                         </table>
                         <%
