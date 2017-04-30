@@ -27,6 +27,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Social Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body {
                 padding-top: 50px;
@@ -42,11 +44,24 @@
             table {
                 margin-top: 25px;
             }
+            th, td {
+                text-align: center;
+            }
             td > a {
                 text-decoration: none;
             }
             div#noFriends {
                 margin-top: 20px;
+            }
+            a.socialIcon {
+                font-size: 24px;
+                text-decoration: none;
+            }
+            a.fa-twitter {
+                color: #00aced;
+            }
+            a.fa-instagram {
+                color: #bc2a8d;
             }
         </style>
         <!-- BOOTSTRAP END -->
@@ -117,8 +132,7 @@
                         <th>Username</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Twitter</th>
-                        <th>Instagram</th>
+                        <th>Social Media</th>
                         <th>Webpage</th>
                         <th></th>
                         <th></th>
@@ -132,17 +146,27 @@
                     <tr>
                         <td><%= friend.getUsername() %></td>
                         <td><%= friend.getName() %></td>
-                        <td><%= friend.getLastName() %></td>
-                        <td><%= friend.getTwitter() %></td>
-                        <td><%= friend.getInstagram() %></td>
-                        <td><%= friend.getWebpage() %></td>
+                        <td><%= friend.getLastName()%></td>
+                        <td>
+                            <% if(!friend.getTwitter().equals("")) { %>
+                            <a href="https://twitter.com/<%= friend.getTwitter() %>" class="fa fa-twitter socialIcon" title="Twitter"></a>
+                            <% } %>
+                            <% if(!friend.getInstagram().equals("")) { %>
+                            <a href="https://instagram.com/<%= friend.getInstagram()%>" class="fa fa-instagram socialIcon" title="Instagram"></a>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if(!friend.getWebpage().equals("")) { %>
+                            <a href="https://<%=friend.getWebpage()%>"><%=friend.getWebpage()%></a>
+                            <% } %>
+                        </td>
                         <td>
                             <a href="<%= application.getContextPath() %>/ProfileServlet?id=<%= friend.getId() %>" title="Show profile">
                                 <span class="glyphicon glyphicon-info-sign"></span> 
                             </a>
                         </td>
                         <td>
-                            <a href="#" title="Send message">
+                            <a href="#" title="Send message" style="font-size:16px;">
                                 <span class="glyphicon glyphicon-envelope"></span> 
                             </a>
                         </td>
