@@ -84,7 +84,8 @@ public class UserFacade extends AbstractFacade<User> {
                                                                                 + "ELSE f.USER_ID1 END) AS userId "
                                                                    + "FROM Friendship AS f "
                                                                    + "WHERE f.confirmed = 1 "
-                                                                     + "AND (f.USER_ID = ?1 OR f.USER_ID1 = ?1))", User.class);
+                                                                     + "AND (f.USER_ID = ?1 OR f.USER_ID1 = ?1)) "
+                                                    + "ORDER BY u.username", User.class);
         queryFindFriends.setParameter(1, UserID);
         List<User> friends = queryFindFriends.getResultList();
         

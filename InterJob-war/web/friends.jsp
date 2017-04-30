@@ -18,6 +18,7 @@
         
         // Variables for showing errors in the alerts section of the webpage
         String error = (String)request.getAttribute("error");
+        String info = (String)request.getAttribute("info");
     %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -44,10 +45,13 @@
             td > a {
                 text-decoration: none;
             }
+            div#noFriends {
+                margin-top: 20px;
+            }
         </style>
         <!-- BOOTSTRAP END -->
         <% if(ownPage) { %>
-        <title>My friends</title>
+        <title>My Friends</title>
         <% } else { %>
         <title>Friends of <%= username %></title>
         <% } %>
@@ -84,19 +88,24 @@
         </nav><!-- NAVBAR END -->
         
         <!-- ALERT SYSTEM -->
-            <%
-                if (error != null) {
-            %>
-                <div class="alert alert-danger alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error:</strong> <%=error%>
-                </div>
-            <% } %>
-            <!-- ALERT SYSTEM END -->
+        <%
+            if (error != null) {
+        %>
+        <div class="alert alert-danger alert-dismissable fade in container alert-system">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error:</strong> <%=error%>
+        </div>
+        <% } else if (info != null) {%>
+        <div class="alert alert-success alert-dismissable fade in container alert-system">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <%=info%>
+        </div>
+        <% }%>
+        <!-- ALERT SYSTEM END -->
     
         <div class="container">
             <% if(ownPage) { %>
-            <h2>My friends</h2>
+            <h2>My Friends</h2>
             <% } else { %>
             <h2>Friends of <%= username %></h2>
             <% } %>
@@ -139,7 +148,7 @@
                         </td>
                         <% if(ownPage) { %>
                         <td>
-                            <a href="#" title="Delete friendship">
+                            <a href="<%= application.getContextPath() %>/DeleteFriendServlet?friend=<%= friend.getId() %>" title="Break off the friendship">
                                 <span class="glyphicon glyphicon-trash"></span> 
                             </a>
                         </td>
@@ -150,7 +159,15 @@
                 </tbody>
             </table>
             <% } else { %>
-            The user <%= username %>  has no friends. :(
+                <% if(ownPage) { %>
+                <div id="noFriends">
+                Your friend list is empty. :(
+                </div>
+                <% } else { %>
+                <div id="noFriends">
+                The friend list of the user <%= username %>  is empty. :(
+                </div>
+                <% } %>
             <% } %>
          </div>
     </body>

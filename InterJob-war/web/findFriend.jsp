@@ -35,6 +35,10 @@
                 left: 0;
                 right: 0;
             }
+            
+            table {
+                margin-top: 15px;
+            }
         </style>
         <!-- BOOTSTRAP END -->
         <title>Find Friend</title>

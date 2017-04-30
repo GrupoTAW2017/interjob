@@ -6,9 +6,11 @@
 package interJob.ejb;
 
 import interJob.entity.Friendship;
+import interJob.entity.User;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,16 @@ public class FriendshipFacade extends AbstractFacade<Friendship> {
 
     public FriendshipFacade() {
         super(Friendship.class);
+    }
+    
+    public int deleteFriend(User myself, User friend) {
+        Query query = em.createQuery("DELETE FROM Friendship f "
+                                   + "WHERE (f.userId = :myself AND f.userId1 = :friend) "
+                                      + "OR (f.userId = :friend AND f.userId1 = :myself)");
+        query.setParameter("myself", myself);
+        query.setParameter("friend", friend);
+        
+        return query.executeUpdate();
     }
     
 }
