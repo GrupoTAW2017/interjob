@@ -4,9 +4,11 @@
     Author     : Francisco Ruiz <pacorf>
 --%>
 
-<%@ page import="interJob.entity.User" %>
 <%@ page import="interJob.entity.Hobby" %>
+<%@ page import="interJob.entity.Studies" %>
+<%@ page import="interJob.entity.User" %>
 <%@ page import="java.util.List;" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,9 @@
         User user = (User)request.getSession().getAttribute("user"); // Logged in User
         User profileUser = (User)request.getAttribute("profileuser"); // WARNING: user can be the logged in one or a requested one by id
         List<Hobby> hobbies = (List<Hobby>) request.getAttribute("hobbies");
+        List<Studies> studies = (List<Studies>) request.getAttribute("studies");
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
         
         // Variables for showing errors in the alerts section of the webpage
         String error = (String)request.getAttribute("error");
@@ -38,7 +43,7 @@
                 right: 0;
             }
             
-            ul#hobbies {
+            ul.infoList {
                 padding-left: 10px;
             }
         </style>
@@ -143,12 +148,26 @@
                                 <td><a href="https://<%=profileUser.getWebpage()%>"><%=profileUser.getWebpage()%></a></td>
                             </tr>
                             <tr>
+                                <td><b>Studies:</b></td>
+                                <td>
+                                <% if(studies.size() == 0) { %>
+                                    <i>no studies</i>
+                                <% } else { %>
+                                    <ul class="infoList">
+                                    <% for(Studies s : studies) { %>
+                                        <li><%= dateFormat.format(s.getStartDate()) %> - <%= dateFormat.format(s.getEndDate()) %>: <%= s.getDescription() %> (<%= s.getLocation() %>)</li>
+                                    <% } %>
+                                    </ul>
+                                <% } %>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><b>Hobbies:</b></td>
                                 <td>
                                 <% if(hobbies.size() == 0) { %>
-                                <i>no hobbies</i>
+                                    <i>no hobbies</i>
                                 <% } else { %>
-                                    <ul id="hobbies">
+                                    <ul class="infoList">
                                     <% for(Hobby h : hobbies) { %>
                                         <li><%= h.getName() %></li>
                                     <% } %>
