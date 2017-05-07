@@ -16,7 +16,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author rassillon
+ * @author Francisco Ruiz <pacorf>
  */
 @Stateless
 public class HobbyFacade extends AbstractFacade<Hobby> {

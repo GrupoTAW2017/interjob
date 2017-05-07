@@ -1,7 +1,7 @@
 <%-- 
     Document   : findFriend
     Created on : Apr 24, 2017, 9:00:15 AM
-    Author     : rassillon
+    Author     : Francisco Ruiz <pacorf>
 --%>
 
 <%@page import="interJob.entity.User"%>
