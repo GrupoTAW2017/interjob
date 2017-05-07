@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Francisco Ruiz <pacorf>
+ * @author Andreas Blume <bluman91>
  */
 @WebServlet(name = "HomeServlet", urlPatterns = {"/HomeServlet"})
 public class HomeServlet extends HttpServlet {

@@ -1,7 +1,7 @@
 <%-- 
     Document   : friends.jsp
     Created on : 18.04.2017, 14:44:22
-    Author     : bluman91
+    Author     : Andreas Blume <bluman91>
 --%>
 
 <%@ page import="java.util.List;" %>

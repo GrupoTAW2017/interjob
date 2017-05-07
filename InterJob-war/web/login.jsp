@@ -1,7 +1,7 @@
 <%-- 
     Document   : login
     Created on : 02-abr-2017, 18:39:44
-    Author     : fuynfactory
+    Author     : Andreas Blume <bluman91>
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

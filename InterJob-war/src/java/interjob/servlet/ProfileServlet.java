@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Francisco Ruiz <pacorf>
+ * @author Andreas Blume <bluman91>
  */
 @WebServlet(name = "ProfileServlet", urlPatterns = {"/ProfileServlet"})
 public class ProfileServlet extends HttpServlet {

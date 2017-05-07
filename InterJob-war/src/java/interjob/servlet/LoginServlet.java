@@ -19,7 +19,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author fuynfactory
+ * @author Andreas Blume <bluman91>
+ * @author Francisco Ruiz <pacorf>
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {

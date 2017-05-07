@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author User
+ * @author Andreas Blume <bluman91>
  */
 @WebServlet(name = "DeleteFriendServlet", urlPatterns = {"/DeleteFriendServlet"})
 public class DeleteFriendServlet extends HttpServlet {

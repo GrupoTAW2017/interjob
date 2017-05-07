@@ -1,7 +1,7 @@
 <%-- 
     Document   : profile
     Created on : 17-abr-2017, 19:55:31
-    Author     : Francisco Ruiz <pacorf>
+    Author     : Francisco Ruiz <pacorf> and Andreas Blume <bluman91>
 --%>
 
 <%@ page import="interJob.entity.Hobby" %>

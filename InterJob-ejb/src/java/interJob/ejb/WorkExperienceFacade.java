@@ -17,6 +17,7 @@ import javax.persistence.Query;
 /**
  *
  * @author Francisco Ruiz <pacorf>
+ * @author Andreas Blume <bluman91>
  */
 @Stateless
 public class WorkExperienceFacade extends AbstractFacade<WorkExperience> {
