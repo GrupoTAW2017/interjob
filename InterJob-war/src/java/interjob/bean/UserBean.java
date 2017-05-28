@@ -1,8 +1,10 @@
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+    Document   : UserBean.java
+    Created on : 28-may-2017, 22:40:00
+    Author     : Andreas Blume <bluman91>
+*/
+
 package interjob.bean;
 
 import interJob.ejb.FriendshipFacade;
@@ -21,6 +23,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -50,16 +54,26 @@ public class UserBean implements Serializable {
     
     @PostConstruct
     public void init() {
-            Integer profileId = 1; // user id used for showing profile info.
-            this.profileUser = userFacade.findUserById(profileId);
-            if (profileUser != null) {
-                // find studies
-                this.studies = this.studiesFacade.findStudiesByUser(profileUser);
-                // find work experiences
-                this.workExperiences = this.workExperienceFacade.findWorkExperiencesByUser(profileUser);
-                // find hobbies
-                this.hobbies = this.hobbyFacade.findHobbiesByUser(profileUser);
-            }
+        // check GET-Parameter
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+        Integer profileId;
+        try {
+            profileId = Integer.parseInt(paramMap.get("id"));
+        } catch (NumberFormatException e) { // If no parameter, choose no user
+            this.profileUser = null;
+            return;
+        }
+
+        this.profileUser = userFacade.findUserById(profileId);
+        if (this.profileUser != null) {
+            // find studies
+            this.studies = this.studiesFacade.findStudiesByUser(profileUser);
+            // find work experiences
+            this.workExperiences = this.workExperienceFacade.findWorkExperiencesByUser(profileUser);
+            // find hobbies
+            this.hobbies = this.hobbyFacade.findHobbiesByUser(profileUser);
+        }
     }
 
     public User getProfileUser() {
