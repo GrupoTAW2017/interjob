@@ -84,12 +84,12 @@ ToDo:
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
                         <li><a href="#{request.contextPath}/home.xhtml">Home</a></li>
-                        <c:if test="#{not empty userBean.profileUser}"> <!-- only show if profileuser is logged in user -->
+                        <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
                             <li class="active">
                                 <a href="#{request.contextPath}/profile.xhtml">My Profile</a>
                             </li>
                         </c:if>
-                        <c:if test="#{empty userBean.profileUser}"> <!-- only show if NOT profileuser is logged in user -->
+                        <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
                             <li>
                                 <a href="#{request.contextPath}/profile.xhtml">My Profile</a>
                             </li>

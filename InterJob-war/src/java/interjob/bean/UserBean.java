@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 
 /**
@@ -40,6 +41,9 @@ public class UserBean implements Serializable {
     @EJB    StudiesFacade studiesFacade;
     @EJB    UserFacade userFacade;
     @EJB    WorkExperienceFacade workExperienceFacade;
+    
+    @Inject
+    private SessionBean sessionBean;
     
     
     private User profileUser = null;
@@ -61,8 +65,13 @@ public class UserBean implements Serializable {
         try {
             profileId = Integer.parseInt(paramMap.get("id"));
         } catch (NumberFormatException e) { // If no parameter, choose no user
-            this.profileUser = null;
-            return;
+            if(sessionBean != null) {
+                profileId = sessionBean.getUser().getId();
+            }
+            else {
+                this.profileUser = null;
+                return;
+            }
         }
 
         this.profileUser = userFacade.findUserById(profileId);
