@@ -22,6 +22,7 @@ ToDo:
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!-- BOOTSTRAP REQUIRED STYLESHEETS AND JS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
@@ -61,7 +62,12 @@ ToDo:
             }
         </style>    
         <c:if test="#{not empty userBean.profileUser}">
-            <title><h:outputText value="#{userBean.profileUser.username}"/>'s profile</title>
+            <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                <title>My Profile</title>
+            </c:if>
+            <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
+                <title><h:outputText value="#{userBean.profileUser.username}"/>'s profile</title>
+            </c:if>
         </c:if>
         <c:if test="#{empty userBean.profileUser}">
             <title>Profile not found!</title>
@@ -83,19 +89,25 @@ ToDo:
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
-                        <li><a href="#{request.contextPath}/home.xhtml">Home</a></li>
+                        <li>
+                            <a href="#{request.contextPath}/faces/home.xhtml">Home</a>
+                        </li>
                         <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
                             <li class="active">
-                                <a href="#{request.contextPath}/profile.xhtml">My Profile</a>
+                                <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
                             </li>
                         </c:if>
                         <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
                             <li>
-                                <a href="#{request.contextPath}/profile.xhtml">My Profile</a>
+                                <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
                             </li>
                         </c:if>
-                        <li><a href="#{request.contextPath}/friends.xhtml">Friends</a></li>
-                        <li><a href="#">EXAMPLE</a></li>
+                        <li>
+                            <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                        </li>
+                        <li>
+                            <a href="#">EXAMPLE</a>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#{request.contextPath}/logout.xhtml">Logout</a></li>
@@ -127,7 +139,12 @@ ToDo:
                 <h2>The User doesn't exist!</h2>
             </c:if>
             <c:if test="#{not empty userBean.profileUser}">
-                <h2>#{userBean.profileUser.username}'s profile</h2>
+                <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                    <h2>My Profile</h2>
+                </c:if>
+                <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
+                    <h2>#{userBean.profileUser.username}'s profile</h2>
+                </c:if>
                 <table>
                     <tr>
                         <td>
@@ -245,7 +262,7 @@ ToDo:
                                         </td>
                                         <td>
                                             <c:if test="#{userBean.profileUser.twitter ne ''}">
-                                                <h:outputLink class="fa fa-twitter socialIcon"></h:outputLink>
+                                                <h:outputLink value="https://twitter.com/#{userBean.profileUser.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
                                             </c:if>
                                             <c:if test="#{userBean.profileUser.instagram ne ''}">
                                                 <h:outputLink value="https://instagram.com/#{userBean.profileUser.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
@@ -254,6 +271,13 @@ ToDo:
                                     </tr>
                                 </c:if>
                             </table>
+                            <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                                <a href="#" class="btn btn-default" role="button">Edit Profile</a>
+                                <a href="#" class="btn btn-default" role="button">Change Password</a>
+                            </c:if>
+                            <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
+                                <a href="#{request.contextPath}/faces/friends.xhtml?id=#{userBean.profileUser.id}" class="btn btn-default" role="button">Show his/her Friends</a>
+                            </c:if>
                         </td>
                     </tr>
                 </table>

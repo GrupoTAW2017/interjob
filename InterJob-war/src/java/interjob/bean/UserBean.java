@@ -1,13 +1,6 @@
 
-/*
-    Document   : UserBean.java
-    Created on : 28-may-2017, 22:40:00
-    Author     : Andreas Blume <bluman91>
-*/
-
 package interjob.bean;
 
-import interJob.ejb.FriendshipFacade;
 import interJob.ejb.HobbyFacade;
 import interJob.ejb.StudiesFacade;
 import interJob.ejb.UserFacade;
@@ -28,15 +21,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 
-/**
- *
- * @author Andreas Blume <bluman91>
- */
+/*
+    Document   : FriendsBean.java
+    Created on : 28-may-2017, 22:40:00
+    Author     : Andreas Blume <bluman91>
+*/
 @Named
 @RequestScoped
 public class UserBean implements Serializable {
     
-    @EJB    FriendshipFacade friendshipFacade;
     @EJB    HobbyFacade hobbyFacade;
     @EJB    StudiesFacade studiesFacade;
     @EJB    UserFacade userFacade;
@@ -49,7 +42,7 @@ public class UserBean implements Serializable {
     private User profileUser = null;
     private List<Studies> studies = null;
     private List<WorkExperience> workExperiences = null;
-    private  List<Hobby> hobbies = null;
+    private List<Hobby> hobbies = null;
     
     
     public UserBean() {

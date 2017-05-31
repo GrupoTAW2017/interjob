@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+    Document   : profile.xhtml
+    Created on : 31-may-2017, 23:00:00
+    Author     : Andreas Blume <bluman91>
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!-- BOOTSTRAP REQUIRED STYLESHEETS AND JS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- BOOTSTRAP END -->
+        <!-- Social Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <style>
+            body {
+                padding-top: 50px;
+            }
+            .alert-system {
+                position: absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
+            }
+            
+            table {
+                margin-top: 10px;
+            }
+            
+            ul.infoList {
+                padding-left: 10px;
+            }
+            a.socialIcon {
+                font-size: 24px;
+                text-decoration: none;
+            }
+            a.fa-twitter {
+                color: #00aced;
+            }
+            a.fa-instagram {
+                color: #bc2a8d;
+            }
+        </style>    
+        <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+            <title>My Friends</title>
+        </c:if>
+        <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
+            <title>Friends of #{friendsBean.user.username}</title>
+        </c:if>
+    </h:head>
+    
+    <h:body>
+        <!-- NAVBAR BEGIN -->
+        <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#{request.contextPath}">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
+                        <li>
+                            <a href="#{request.contextPath}/faces/home.xhtml">Home</a>
+                        </li>
+                        <li>
+                            <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
+                        </li>
+                        <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+                            <li class="active">
+                                <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                            </li>
+                        </c:if>
+                        <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
+                            <li>
+                                <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                            </li>
+                        </c:if>
+                        <li>
+                            <a href="#">EXAMPLE</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#{request.contextPath}/logout.xhtml">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- NAVBAR END -->
+        <!-- ALERT SYSTEM -->
+        <!--
+            <%
+                if (error != null) {
+            %>
+                <div  class="alert alert-danger alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error:</strong> <%=error%>
+                </div>
+            <% } else if (info != null) {%>
+                <div class="alert alert-info alert-dismissable fade in container alert-system">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Info:</strong> <%=info%>
+                </div>
+            
+            <% }%>
+        -->
+        <!-- ALERT SYSTEM END -->
+        <div class="container" style="margin-bottom: 30px;">
+            <c:if test="#{empty userBean.profileUser}">
+                <h2>The User doesn't exist!</h2>
+            </c:if>
+            <c:if test="#{not empty userBean.profileUser}">
+                <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+                <h2>My Friends</h2>
+                </c:if>
+                <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
+                    <h2>Friends of #{friendsBean.user.username}</h2>
+                </c:if>
+                <p><a href="#" class="btn btn-default">Search Friend</a></p>
+                <c:if test="#{friendsBean.friends.size() gt 0}">
+                    <h:dataTable value="#{friendsBean.friends}" var="friend" styleClass="table table-striped table-responsive">
+                        <h:column>
+    				<f:facet name="header">Username</f:facet>
+    				#{friend.username}
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header">First Name</f:facet>
+    				#{friend.name}
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header">Last Name</f:facet>
+    				#{friend.lastName}
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header">Social Media</f:facet>
+    				<c:if test="#{friend.twitter ne ''}">
+                                    <h:outputLink value="https://twitter.com/#{friend.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
+                                </c:if>
+                                <c:if test="#{friend.instagram ne ''}">
+                                    <h:outputLink value="https://instagram.com/#{friend.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
+                                </c:if>
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header">Webpage</f:facet>
+                                <c:if test="#{friend.webpage ne ''}">
+                                    <h:outputLink value="http://#{friend.webpage}">
+                                        <h:outputText value="#{friend.webpage}"/>
+                                    </h:outputLink>
+                                </c:if>
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header"></f:facet>
+                                <a href="#{request.contextPath}/faces/profile.xhtml?id=#{friend.id}" title="Show profile">
+                                    <span class="glyphicon glyphicon-info-sign"></span> 
+                                </a>
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header"></f:facet>
+    				<a href="#" title="Send message" style="font-size:16px;">
+                                    <span class="glyphicon glyphicon-envelope"></span> 
+                                </a>
+    			</h:column>
+                        <h:column>
+    				<f:facet name="header"></f:facet>
+                                <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                    <a href="#" title="Break off the friendship">
+                                        <span class="glyphicon glyphicon-trash"></span> 
+                                    </a>
+                                </c:if>
+    			</h:column>
+                    </h:dataTable>
+                </c:if>
+                <c:if test="#{friendsBean.friends.size() eq 0}">
+                    <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+                        <div id="noFriends">
+                            Your friend list is empty. :(
+                        </div>
+                    </c:if>
+                    <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
+                        <div id="noFriends">
+                            The friend list of the user #{friendsBean.user.username}  is empty. :(
+                        </div>
+                    </c:if>
+                </c:if>
+            </c:if>
+        </div>
+    </h:body>
+</html>
