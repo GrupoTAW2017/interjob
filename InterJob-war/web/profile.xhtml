@@ -60,18 +60,22 @@ ToDo:
             a.fa-instagram {
                 color: #bc2a8d;
             }
-        </style>    
-        <c:if test="#{not empty userBean.profileUser}">
-            <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
-                <title>My Profile</title>
-            </c:if>
-            <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
-                <title><h:outputText value="#{userBean.profileUser.username}"/>'s profile</title>
-            </c:if>
-        </c:if>
-        <c:if test="#{empty userBean.profileUser}">
-            <title>Profile not found!</title>
-        </c:if>
+        </style>
+        <c:choose>
+            <c:when test="#{not empty userBean.profileUser}">
+                <c:choose>
+                    <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                        <title>My Profile</title>
+                    </c:when>
+                    <c:otherwise>
+                        <title><h:outputText value="#{userBean.profileUser.username}"/>'s profile</title>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:otherwise>
+                <title>Profile not found!</title>
+            </c:otherwise>
+        </c:choose>
     </h:head>
     
     <h:body>
@@ -92,16 +96,18 @@ ToDo:
                         <li>
                             <a href="#{request.contextPath}/faces/home.xhtml">Home</a>
                         </li>
-                        <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
-                            <li class="active">
-                                <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
-                            </li>
-                        </c:if>
-                        <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
-                            <li>
-                                <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
-                            </li>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                                <li class="active">
+                                    <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>>
                         <li>
                             <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
                         </li>
@@ -135,153 +141,168 @@ ToDo:
         -->
         <!-- ALERT SYSTEM END -->
         <div class="container" style="margin-bottom: 30px;">
-            <c:if test="#{empty userBean.profileUser}">
-                <h2>The User doesn't exist!</h2>
-            </c:if>
-            <c:if test="#{not empty userBean.profileUser}">
-                <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
-                    <h2>My Profile</h2>
-                </c:if>
-                <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
-                    <h2>#{userBean.profileUser.username}'s profile</h2>
-                </c:if>
-                <table>
-                    <tr>
-                        <td>
-                            <h:graphicImage value="#{userBean.profileUser.foto}" alt="#{userBean.profileUser.username}" title="#{userBean.profileUser.username}" />
-                        </td>
-                        <td>
-                            <table class="table">
-                                <tr>
-                                    <td>
-                                        <b>Name:</b>
-                                    </td>
-                                    <td>#{userBean.profileUser.name}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b>Last Name:</b>
-                                    </td>
-                                    <td>#{userBean.profileUser.lastName}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b>Studies:</b>
-                                    </td>
-                                    <td>
-                                        <c:if test="#{userBean.studies.size() eq 0}">
-                                            <i>no studies</i>
-                                        </c:if>
-                                        <c:if test="#{userBean.studies.size() gt 0}">
-                                            <ul class="infoList">
-                                            <ui:repeat var="s" value="#{userBean.studies}" varStatus="status">
-                                                <li>
-                                                    <h:outputText value="#{s.startDate}">
-                                                        <f:convertDateTime type="date" pattern="MM/yyyy"/>
-                                                    </h:outputText>
-                                                    - 
-                                                    <c:if test="#{s.endDate != ''}">
-                                                        <h:outputText value="#{s.endDate}">
-                                                            <f:convertDateTime type="date" pattern="MM/yyyy"/>
-                                                        </h:outputText>:
-                                                    </c:if>
-                                                    <c:if test="#{not (s.endDate != '')}">
-                                                        today:
-                                                    </c:if>
-                                                        #{s.description} (#{s.location})
-                                                </li>
-                                            </ui:repeat>
-                                            </ul>
-                                        </c:if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b>Work Experiences:</b>
-                                    </td>
-                                    <td>
-                                        <c:if test="#{userBean.workExperiences.size() eq 0}">
-                                            <i>no work experiences</i>
-                                        </c:if>
-                                        <c:if test="#{userBean.workExperiences.size() gt 0}">
-                                            <ul class="infoList">
-                                            <ui:repeat var="w" value="#{userBean.workExperiences}" varStatus="status">
-                                                <li>
-                                                    <h:outputText value="#{w.startDate}">
-                                                        <f:convertDateTime type="date" pattern="MM/yyyy"/>
-                                                    </h:outputText>
-                                                    - 
-                                                    <c:if test="#{w.endDate != ''}">
-                                                        <h:outputText value="#{w.endDate}">
-                                                            <f:convertDateTime type="date" pattern="MM/yyyy"/>
-                                                        </h:outputText>:
-                                                    </c:if>
-                                                    <c:if test="#{not (w.endDate != '')}">
-                                                        today:
-                                                    </c:if>
-                                                        #{w.job} (<h:outputLink value="http://#{w.webpage}"><h:outputText value="#{w.business}"/></h:outputLink>)
-                                                </li>
-                                            </ui:repeat>
-                                            </ul>
-                                        </c:if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b>Hobbies:</b>
-                                    </td>
-                                    <td>
-                                        <c:if test="#{userBean.hobbies.size() eq 0}">
-                                            <i>no hobbies</i>
-                                        </c:if>
-                                        <c:if test="#{userBean.hobbies.size() gt 0}">
-                                            <ul class="infoList">
-                                            <ui:repeat var="h" value="#{userBean.hobbies}" varStatus="status">
-                                                <li>#{h.name}</li>
-                                            </ui:repeat>
-                                            </ul>
-                                        </c:if>
-                                    </td>
-                                </tr>
-                                <c:if test="#{userBean.profileUser.webpage ne ''}">
+            <c:choose>
+                <c:when test="#{empty userBean.profileUser}">
+                    <h2>The User doesn't exist!</h2>
+                </c:when>
+                <c:otherwise>
+                    <c:choose>
+                        <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                            <h2>My Profile</h2>
+                        </c:when>
+                        <c:otherwise>
+                            <h2>#{userBean.profileUser.username}'s profile</h2>
+                        </c:otherwise>
+                    </c:choose>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:graphicImage value="#{userBean.profileUser.foto}" alt="#{userBean.profileUser.username}" title="#{userBean.profileUser.username}" />
+                            </td>
+                            <td>
+                                <table class="table">
                                     <tr>
                                         <td>
-                                            <b>Webpage:</b>
+                                            <b>Name:</b>
                                         </td>
-                                        <td>
-                                            <h:outputLink value="http://#{userBean.profileUser.webpage}">
-                                                <h:outputText value="#{userBean.profileUser.webpage}"/>
-                                            </h:outputLink>
-                                        </td>
+                                        <td>#{userBean.profileUser.name}</td>
                                     </tr>
-                                </c:if>
-                                <c:if test="#{userBean.profileUser.twitter ne ''  ||  userBean.profileUser.instagram ne ''}">
                                     <tr>
                                         <td>
-                                            <b>Social Media:</b>
+                                            <b>Last Name:</b>
+                                        </td>
+                                        <td>#{userBean.profileUser.lastName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Studies:</b>
                                         </td>
                                         <td>
-                                            <c:if test="#{userBean.profileUser.twitter ne ''}">
-                                                <h:outputLink value="https://twitter.com/#{userBean.profileUser.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
+                                            <c:if test="#{userBean.studies.size() eq 0}">
+                                                <i>no studies</i>
                                             </c:if>
-                                            <c:if test="#{userBean.profileUser.instagram ne ''}">
-                                                <h:outputLink value="https://instagram.com/#{userBean.profileUser.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
+                                            <c:if test="#{userBean.studies.size() gt 0}">
+                                                <ul class="infoList">
+                                                <ui:repeat var="s" value="#{userBean.studies}" varStatus="status">
+                                                    <li>
+                                                        <h:outputText value="#{s.startDate}">
+                                                            <f:convertDateTime type="date" pattern="MM/yyyy"/>
+                                                        </h:outputText>
+                                                        - 
+                                                        <c:choose>
+                                                            <c:when test = "#{s.endDate != ''}">
+                                                                <h:outputText value="#{s.endDate}">
+                                                                    <f:convertDateTime type="date" pattern="MM/yyyy"/>
+                                                                </h:outputText>:
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                today:
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                            #{s.description} (#{s.location})
+                                                    </li>
+                                                </ui:repeat>
+                                                </ul>
                                             </c:if>
                                         </td>
                                     </tr>
-                                </c:if>
-                            </table>
-                            <c:if test="#{userBean.profileUser.id eq sessionBean.user.id}">
-                                <a href="#" class="btn btn-default" role="button">Edit Profile</a>
-                                <a href="#" class="btn btn-default" role="button">Change Password</a>
-                            </c:if>
-                            <c:if test="#{userBean.profileUser.id ne sessionBean.user.id}">
-                                <a href="#{request.contextPath}/faces/friends.xhtml?id=#{userBean.profileUser.id}" class="btn btn-default" role="button">Show his/her Friends</a>
-                            </c:if>
-                        </td>
-                    </tr>
-                </table>
-            </c:if>
+                                    <tr>
+                                        <td>
+                                            <b>Work Experiences:</b>
+                                        </td>
+                                        <td>
+                                            <c:if test="#{userBean.workExperiences.size() eq 0}">
+                                                <i>no work experiences</i>
+                                            </c:if>
+                                            <c:if test="#{userBean.workExperiences.size() gt 0}">
+                                                <ul class="infoList">
+                                                <ui:repeat var="w" value="#{userBean.workExperiences}" varStatus="status">
+                                                    <li>
+                                                        <h:outputText value="#{w.startDate}">
+                                                            <f:convertDateTime type="date" pattern="MM/yyyy"/>
+                                                        </h:outputText>
+                                                        -
+                                                        <c:choose>
+                                                            <c:when test = "#{w.endDate != ''}">
+                                                                <h:outputText value="#{w.endDate}">
+                                                                    <f:convertDateTime type="date" pattern="MM/yyyy"/>
+                                                                </h:outputText>:
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                today:
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                            #{w.job} (<h:outputLink value="http://#{w.webpage}"><h:outputText value="#{w.business}"/></h:outputLink>)
+                                                    </li>
+                                                </ui:repeat>
+                                                </ul>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Hobbies:</b>
+                                        </td>
+                                        <td>
+                                            <c:if test="#{userBean.hobbies.size() eq 0}">
+                                                <i>no hobbies</i>
+                                            </c:if>
+                                            <c:if test="#{userBean.hobbies.size() gt 0}">
+                                                <ul class="infoList">
+                                                <ui:repeat var="h" value="#{userBean.hobbies}" varStatus="status">
+                                                    <li>#{h.name}</li>
+                                                </ui:repeat>
+                                                </ul>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                        <tr>
+                                            <td>
+                                                <b>Webpage:</b>
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="#{userBean.profileUser.webpage ne ''}">
+                                                        <h:outputLink value="http://#{userBean.profileUser.webpage}">
+                                                            <h:outputText value="#{userBean.profileUser.webpage}"/>
+                                                        </h:outputLink>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        -
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </tr>
+                                    <c:if test="#{userBean.profileUser.twitter ne ''  ||  userBean.profileUser.instagram ne ''}">
+                                        <tr>
+                                            <td>
+                                                <b>Social Media:</b>
+                                            </td>
+                                            <td>
+                                                <c:if test="#{userBean.profileUser.twitter ne ''}">
+                                                    <h:outputLink value="https://twitter.com/#{userBean.profileUser.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
+                                                </c:if>
+                                                <c:if test="#{userBean.profileUser.instagram ne ''}">
+                                                    <h:outputLink value="https://instagram.com/#{userBean.profileUser.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </table>
+                                <c:choose>
+                                    <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                                        <a href="#" class="btn btn-default" role="button">Edit Profile</a>
+                                        <a href="#" class="btn btn-default" role="button">Change Password</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="#{request.contextPath}/faces/friends.xhtml?id=#{userBean.profileUser.id}" class="btn btn-default" role="button">Show his/her Friends</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </table>
+                </c:otherwise>
+            </c:choose>
         </div>
     </h:body>
 </html>

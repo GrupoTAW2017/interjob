@@ -52,13 +52,15 @@
             a.fa-instagram {
                 color: #bc2a8d;
             }
-        </style>    
-        <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-            <title>My Friends</title>
-        </c:if>
-        <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
-            <title>Friends of #{friendsBean.user.username}</title>
-        </c:if>
+        </style>
+        <c:choose>
+            <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                <title>My Friends</title>
+            </c:when>
+            <c:otherwise>
+                <title>Friends of #{friendsBean.user.username}</title>
+            </c:otherwise>
+        </c:choose>
     </h:head>
     
     <h:body>
@@ -82,16 +84,18 @@
                         <li>
                             <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
                         </li>
-                        <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                            <li class="active">
-                                <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
-                            </li>
-                        </c:if>
-                        <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
-                            <li>
-                                <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
-                            </li>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                <li class="active">
+                                    <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                         <li>
                             <a href="#">EXAMPLE</a>
                         </li>
@@ -122,83 +126,96 @@
         -->
         <!-- ALERT SYSTEM END -->
         <div class="container" style="margin-bottom: 30px;">
-            <c:if test="#{empty userBean.profileUser}">
-                <h2>The User doesn't exist!</h2>
-            </c:if>
-            <c:if test="#{not empty userBean.profileUser}">
-                <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                <h2>My Friends</h2>
-                </c:if>
-                <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
-                    <h2>Friends of #{friendsBean.user.username}</h2>
-                </c:if>
-                <p><a href="#" class="btn btn-default">Search Friend</a></p>
-                <c:if test="#{friendsBean.friends.size() gt 0}">
-                    <h:dataTable value="#{friendsBean.friends}" var="friend" styleClass="table table-striped table-responsive">
-                        <h:column>
-    				<f:facet name="header">Username</f:facet>
-    				#{friend.username}
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header">First Name</f:facet>
-    				#{friend.name}
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header">Last Name</f:facet>
-    				#{friend.lastName}
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header">Social Media</f:facet>
-    				<c:if test="#{friend.twitter ne ''}">
-                                    <h:outputLink value="https://twitter.com/#{friend.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
-                                </c:if>
-                                <c:if test="#{friend.instagram ne ''}">
-                                    <h:outputLink value="https://instagram.com/#{friend.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
-                                </c:if>
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header">Webpage</f:facet>
-                                <c:if test="#{friend.webpage ne ''}">
-                                    <h:outputLink value="http://#{friend.webpage}">
-                                        <h:outputText value="#{friend.webpage}"/>
-                                    </h:outputLink>
-                                </c:if>
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header"></f:facet>
-                                <a href="#{request.contextPath}/faces/profile.xhtml?id=#{friend.id}" title="Show profile">
-                                    <span class="glyphicon glyphicon-info-sign"></span> 
-                                </a>
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header"></f:facet>
-    				<a href="#" title="Send message" style="font-size:16px;">
-                                    <span class="glyphicon glyphicon-envelope"></span> 
-                                </a>
-    			</h:column>
-                        <h:column>
-    				<f:facet name="header"></f:facet>
-                                <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                                    <a href="#" title="Break off the friendship">
-                                        <span class="glyphicon glyphicon-trash"></span> 
-                                    </a>
-                                </c:if>
-    			</h:column>
-                    </h:dataTable>
-                </c:if>
-                <c:if test="#{friendsBean.friends.size() eq 0}">
-                    <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                        <div id="noFriends">
-                            Your friend list is empty. :(
-                        </div>
-                    </c:if>
-                    <c:if test="#{friendsBean.user.id ne sessionBean.user.id}">
-                        <div id="noFriends">
-                            The friend list of the user #{friendsBean.user.username}  is empty. :(
-                        </div>
-                    </c:if>
-                </c:if>
-            </c:if>
+            <c:choose>
+                <c:when test="#{empty userBean.profileUser}">
+                    <h2>The User doesn't exist!</h2>
+                </c:when>
+                <c:otherwise>
+                    <c:choose>
+                        <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                            <h2>My Friends</h2>
+                        </c:when>
+                        <c:otherwise>
+                            <h2>Friends of #{friendsBean.user.username}</h2>
+                        </c:otherwise>
+                    </c:choose>
+                    <p><a href="#" class="btn btn-default">Search Friend</a></p>
+                    <c:choose>
+                        <c:when test="#{friendsBean.friends.size() gt 0}">
+                            <h:dataTable value="#{friendsBean.friends}" var="friend" styleClass="table table-striped table-responsive">
+                                <h:column>
+                                        <f:facet name="header">Username</f:facet>
+                                        #{friend.username}
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header">First Name</f:facet>
+                                        #{friend.name}
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header">Last Name</f:facet>
+                                        #{friend.lastName}
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header">Social Media</f:facet>
+                                        <c:if test="#{friend.twitter ne ''}">
+                                            <h:outputLink value="https://twitter.com/#{friend.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
+                                        </c:if>
+                                        <c:if test="#{friend.instagram ne ''}">
+                                            <h:outputLink value="https://instagram.com/#{friend.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
+                                        </c:if>
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header">Webpage</f:facet>
+                                        <c:choose>
+                                            <c:when test="#{friend.webpage ne ''}">
+                                                <h:outputLink value="http://#{friend.webpage}">
+                                                    <h:outputText value="#{friend.webpage}"/>
+                                                </h:outputLink>
+                                            </c:when>
+                                            <c:otherwise>
+                                                -
+                                            </c:otherwise>
+                                        </c:choose>
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header"></f:facet>
+                                        <a href="#{request.contextPath}/faces/profile.xhtml?id=#{friend.id}" title="Show profile">
+                                            <span class="glyphicon glyphicon-info-sign"></span> 
+                                        </a>
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header"></f:facet>
+                                        <a href="#" title="Send message" style="font-size:16px;">
+                                            <span class="glyphicon glyphicon-envelope"></span> 
+                                        </a>
+                                </h:column>
+                                <h:column>
+                                        <f:facet name="header"></f:facet>
+                                        <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                            <a href="#" title="Break off the friendship">
+                                                <span class="glyphicon glyphicon-trash"></span> 
+                                            </a>
+                                        </c:if>
+                                </h:column>
+                            </h:dataTable>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                    <div id="noFriends">
+                                        Your friends list is empty. :(
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div id="noFriends">
+                                        The friends list of the user #{friendsBean.user.username}  is empty. :(
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </c:otherwise>
+            </c:choose>
         </div>
     </h:body>
 </html>
