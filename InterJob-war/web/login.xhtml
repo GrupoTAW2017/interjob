@@ -70,20 +70,18 @@
         <!-- NAVBAR END -->
 
         <!-- ALERT SYSTEM BEGIN -->
-        <c:choose>
-            <c:when test="#{not empty request.getAttribute('error')}">
-                <div class="alert alert-danger alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error:</strong> #{request.getAttribute("error")}
-                </div>
-            </c:when>
-            <c:when test="#{not empty request.getAttribute('info')}">
-                <div class="alert alert-success alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    #{request.getAttribute("info")}
-                </div>
-            </c:when>
-        </c:choose>
+        <c:if test="#{not empty request.getAttribute('error')}">
+            <div class="alert alert-danger alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error:</strong> #{request.getAttribute("error")}
+            </div>
+        </c:if>
+        <c:if test="#{not empty request.getAttribute('info')}">
+            <div class="alert alert-success alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                #{request.getAttribute("info")}
+            </div>
+        </c:if>
         <!-- ALERT SYSTEM END -->
         
         <div class="container">

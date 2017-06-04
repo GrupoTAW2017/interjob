@@ -22,11 +22,11 @@ import javax.inject.Inject;
 
 
 /*
-    Document   : FriendsBean.java
-    Created on : 28-may-2017, 22:40:00
-    Author     : Andreas Blume <bluman91>
+    @document   : FriendsBean.java
+    @created on : 28-may-2017, 22:40:00
+    @author     : Andreas Blume <bluman91>
 */
-@Named
+@Named(value = "userBean")
 @RequestScoped
 public class UserBean implements Serializable {
     
@@ -57,11 +57,12 @@ public class UserBean implements Serializable {
         Integer profileId;
         try {
             profileId = Integer.parseInt(paramMap.get("id"));
-        } catch (NumberFormatException e) { // If no parameter, choose no user
-            if(sessionBean != null) {
+        } catch (NumberFormatException e) {
+            if(sessionBean.getUser() != null) { // check if an user is logged in
                 profileId = sessionBean.getUser().getId();
+                System.out.println(profileId);
             }
-            else {
+            else {  // If no parameter, choose no user
                 this.profileUser = null;
                 return;
             }

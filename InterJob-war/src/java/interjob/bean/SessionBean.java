@@ -11,11 +11,10 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 
 /**
  *
- * @author Francisco Ruiz <pacorf>
+ * @author Francisco Ruiz <pacorf>  and  Andreas Blume <bluman91>
  */
 @Named(value = "sessionBean")
 @SessionScoped
@@ -23,21 +22,17 @@ public class SessionBean implements Serializable {
 
     @EJB UserFacade userFacade;
     
+    User user = null;
+    
+
+    public SessionBean() {
+    }
 
     public User getUser() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        return (User) context.getExternalContext().getSessionMap().get("user");
+        return this.user;
     }
 
     public void setUser(User user) {
-        // Put user into session map
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("user", user);
-        // And into SessionBean
-    }
-    /**
-     * Creates a new instance of SessionBean
-     */
-    public SessionBean() {
+        this.user = user;
     }
 }

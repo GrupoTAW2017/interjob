@@ -7,13 +7,9 @@ package interjob.bean;
 
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,7 +62,7 @@ public class LoginBean implements Serializable {
         context.getExternalContext().getRequestMap().put("info", info);
         return "home";
     }
-
+    
     public String getUsername() {
         return username;
     }

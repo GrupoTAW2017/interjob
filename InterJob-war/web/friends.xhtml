@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- 
-    Document   : profile.xhtml
-    Created on : 31-may-2017, 23:00:00
-    Author     : Andreas Blume <bluman91>
+    @document   : profile.xhtml
+    @created on : 31-may-2017, 23:00:00
+    @author     : Andreas Blume <bluman91>
+-->
+
+<!--
+ToDo:
+ - alert system, are we need this in this page?
+ - set correct styling of the logout link => link works only with form around
 -->
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
@@ -101,7 +106,11 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#{request.contextPath}/logout.xhtml">Logout</a></li>
+                        <li>
+                            <h:form>
+                                <h:commandLink action="#{logoutBean.doLogout}">Logout</h:commandLink>
+                            </h:form>
+                        </li>
                     </ul>
                 </div>
             </div>

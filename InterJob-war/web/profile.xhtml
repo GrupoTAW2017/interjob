@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
 <!-- 
-    Document   : profile.xhtml
-    Created on : 25-may-2017, 22:55:00
-    Author     : Andreas Blume <bluman91>
+    @document   : profile.xhtml
+    @created on : 25-may-2017, 22:55:00
+    @author     : Andreas Blume <bluman91>
 -->
 
 
 <!--
 ToDo:
- - check if date is "null" => today or not
- - alert system
- - every xhtml-file you can open in the browser: /faces/<NAME>.xhtml
+ - date-problem: check if date is "null" => today or not
+ - alert system, are we need this in this page?
+ - set correct styling of the logout link => link works only with form around
 -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -116,7 +116,11 @@ ToDo:
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#{request.contextPath}/logout.xhtml">Logout</a></li>
+                        <li>
+                            <h:form>
+                                <h:commandLink action="#{logoutBean.doLogout}">Logout</h:commandLink>
+                            </h:form>
+                        </li>
                     </ul>
                 </div>
             </div>
