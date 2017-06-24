@@ -10,6 +10,7 @@
 ToDo:
  - alert system, are we need this in this page?
  - set correct styling of the logout link => link works only with form around
+ - optimization: after ajax, render only friendList and alertSystem and not all => see: line 210
 -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -118,6 +119,7 @@ ToDo:
         <!-- NAVBAR END -->
         
         <!-- ALERT SYSTEM -->
+        <div id="alertSystem">
         <c:if test="#{not empty request.getAttribute('error')}">
             <div class="alert alert-danger alert-dismissable fade in container alert-system">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -130,9 +132,10 @@ ToDo:
                 #{request.getAttribute("info")}
             </div>
         </c:if>
+        </div>
         <!-- ALERT SYSTEM END -->
         
-        <div class="container" style="margin-bottom: 30px;">
+        <div class="container" style="margin-bottom: 30px;" id="friendList">
             <c:choose>
                 <c:when test="#{empty userBean.profileUser}">
                     <h2>The User doesn't exist!</h2>
@@ -199,9 +202,12 @@ ToDo:
                                 <h:column>
                                         <f:facet name="header"></f:facet>
                                         <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                                            <a href="#{request.contextPath}/faces/friends.xhtml?deleteFriend=#{friend.id}" title="Break off the friendship">
-                                                <span class="glyphicon glyphicon-trash"></span> 
-                                            </a>
+                                            <h:form>
+                                                <h:commandLink title="Break off the friendship">
+                                                    <f:ajax listener="#{friendsBean.deleteFriend(friend.id)}" render="@all" /> <!-- render="friendList alertSystem" -->
+                                                    <span class="glyphicon glyphicon-trash"/>
+                                                </h:commandLink>
+                                            </h:form>
                                         </c:if>
                                 </h:column>
                             </h:dataTable>

@@ -63,14 +63,6 @@ public class FriendsBean implements Serializable {
         }
         else {
             profileId = sessionBean.getUser().getId();
-            
-            // delete friend if necessary
-            if(paramMap.containsKey("deleteFriend")) {
-                try {
-                    Integer delFriendId = Integer.parseInt(paramMap.get("deleteFriend"));
-                    this.deleteFriend(delFriendId);
-                } catch (NumberFormatException nfe) { }
-            }
         }
 
         // get user
@@ -83,7 +75,7 @@ public class FriendsBean implements Serializable {
         }
     }
     
-    private void deleteFriend(Integer delFriendId) {
+    public void deleteFriend(Integer delFriendId) {
         ExternalContext ec = FacesContext.getCurrentInstance()
                                          .getExternalContext();
         
@@ -127,6 +119,9 @@ public class FriendsBean implements Serializable {
                 }
             }
         }
+        
+        // update friend list
+        this.friends = this.userFacade.getFriends(sessionBean.getUser().getId());
     }
     
     public User getUser() {
