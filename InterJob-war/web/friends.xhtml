@@ -12,7 +12,7 @@ ToDo:
  - set correct styling of the logout link => link works only with form around
 -->
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
@@ -116,24 +116,22 @@ ToDo:
             </div>
         </nav>
         <!-- NAVBAR END -->
+        
         <!-- ALERT SYSTEM -->
-        <!--
-            <%
-                if (error != null) {
-            %>
-                <div  class="alert alert-danger alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error:</strong> <%=error%>
-                </div>
-            <% } else if (info != null) {%>
-                <div class="alert alert-info alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Info:</strong> <%=info%>
-                </div>
-            
-            <% }%>
-        -->
+        <c:if test="#{not empty request.getAttribute('error')}">
+            <div class="alert alert-danger alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error:</strong> #{request.getAttribute("error")}
+            </div>
+        </c:if>
+        <c:if test="#{not empty request.getAttribute('info')}">
+            <div class="alert alert-success alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                #{request.getAttribute("info")}
+            </div>
+        </c:if>
         <!-- ALERT SYSTEM END -->
+        
         <div class="container" style="margin-bottom: 30px;">
             <c:choose>
                 <c:when test="#{empty userBean.profileUser}">
@@ -201,7 +199,7 @@ ToDo:
                                 <h:column>
                                         <f:facet name="header"></f:facet>
                                         <c:if test="#{friendsBean.user.id eq sessionBean.user.id}">
-                                            <a href="#" title="Break off the friendship">
+                                            <a href="#{request.contextPath}/faces/friends.xhtml?deleteFriend=#{friend.id}" title="Break off the friendship">
                                                 <span class="glyphicon glyphicon-trash"></span> 
                                             </a>
                                         </c:if>

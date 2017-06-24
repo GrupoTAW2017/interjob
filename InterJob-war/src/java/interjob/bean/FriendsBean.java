@@ -1,6 +1,7 @@
 
 package interjob.bean;
 
+import interJob.ejb.FriendshipFacade;
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,7 +24,8 @@ import javax.inject.Named;
 @RequestScoped
 public class FriendsBean implements Serializable {
     
-    @EJB    UserFacade userFacade;
+    @EJB    private FriendshipFacade friendshipFacade;
+    @EJB    private UserFacade userFacade;
     
     private User user = null;
     private List<User> friends = null;
@@ -36,26 +39,93 @@ public class FriendsBean implements Serializable {
     
     @PostConstruct
     public void init() {
-        // check GET-Parameter
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+        ExternalContext ec = FacesContext.getCurrentInstance()
+                                         .getExternalContext();
+        
+        // check GET-Parameter "id"
         Integer profileId;
-        try {
-            profileId = Integer.parseInt(paramMap.get("id"));
-        } catch (NumberFormatException e) {
-            if(sessionBean.getUser() != null) { // check if an user is logged in
-                profileId = sessionBean.getUser().getId();
+        Map<String, String> paramMap = ec.getRequestParameterMap();
+        if(paramMap.containsKey("id")) {
+            try {
+                profileId = Integer.parseInt(paramMap.get("id"));
+            } catch (NumberFormatException e) {
+                String error = "The get-Parameter 'id' has a wrong format!";
+                ec.getRequestMap().put("error", error);
+            
+                if(sessionBean.getUser() != null) { // check if an user is logged in
+                    profileId = sessionBean.getUser().getId();
+                }
+                else {  // If no parameter, choose no user
+                    this.user = null;
+                    return;
+                }
             }
-            else {  // If no parameter, choose no user
-                this.user = null;
-                return;
+        }
+        else {
+            profileId = sessionBean.getUser().getId();
+            
+            // delete friend if necessary
+            if(paramMap.containsKey("deleteFriend")) {
+                try {
+                    Integer delFriendId = Integer.parseInt(paramMap.get("deleteFriend"));
+                    this.deleteFriend(delFriendId);
+                } catch (NumberFormatException nfe) { }
             }
         }
 
+        // get user
         this.user = userFacade.findUserById(profileId);
+        
+        // find friends
         if (this.user != null) {
             // find friends
             this.friends = this.userFacade.getFriends(this.user.getId());
+        }
+    }
+    
+    private void deleteFriend(Integer delFriendId) {
+        ExternalContext ec = FacesContext.getCurrentInstance()
+                                         .getExternalContext();
+        
+        // check if the UserID is a correct input
+        if(delFriendId < 1) {
+            String error = "The User-ID: \"" + delFriendId + "\" isn't a correct input!";
+            ec.getRequestMap().put("error", error);
+            return;
+        }
+        // check if it the same id as your own UserID
+        if(sessionBean.getUser().getId().equals(delFriendId)) {
+            String info = "You can't break off the friendship with yourself. :D";
+            ec.getRequestMap().put("info", info);
+            return;
+        }
+        
+        // check if an user with this id exist
+        User friend = this.userFacade.findUserById(delFriendId);
+        if(friend == null) {
+            String error = "An user with the User-ID: \"" + delFriendId + "\" doesn't exist!";
+            ec.getRequestMap().put("error", error);
+            return;
+        }
+        
+        // check if you are a friend of the user with the UserID "friendsID"
+        List<User> friendList = userFacade.getFriends(sessionBean.getUser().getId());
+        if(friendList != null) {
+            if(!friendList.contains(friend)) {
+                String error = "You are not a (confirmed) friend of the user \"" + friend.getUsername() + "\"!";
+                ec.getRequestMap().put("error", error);
+            }
+            else {
+                int count = friendshipFacade.deleteFriend(sessionBean.getUser(), friend);
+          
+                if(count == 1) {
+                    String info = "You successfully broke off the friendship with the user \"" + friend.getUsername() + "\"!";
+                    ec.getRequestMap().put("info", info);
+                } else {
+                    String error = "An error occured while breaking off the friendship with the user \"" + friend.getUsername() + "\"! Please try again later.";
+                    ec.getRequestMap().put("error", error);
+                }
+            }
         }
     }
     
