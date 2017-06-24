@@ -83,7 +83,12 @@
             </div>
         </c:if>
         <!-- ALERT SYSTEM END -->
-        
+        <!-- SESSION CHECK BEGIN --> 
+        <c:if test="#{not empty sessionBean.user}">
+            <!-- If logged in -->
+            #{facesContext.externalContext.response.sendRedirect('home.xhtml')}
+        </c:if>
+        <!-- SESSION CHECK END --> 
         <div class="container">
             <h:form class="form-login">
                 <h2 class="form-login">Login</h2>

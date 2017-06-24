@@ -3,18 +3,30 @@
 <!-- 
     @document   : index.xhtml
     @created on : 28-may-2017, 22:40:00
-    @author     : Andreas Blume <bluman91>
+    @author     : Andreas Blume <bluman91> and Francisco Ruiz <pacorf>
 -->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Redirect...</title>
     </h:head>
 
     <h:body>
-        #{facesContext.externalContext.response.sendRedirect('faces/login.xhtml')}
+        <!-- SESSION CHECK BEGIN --> 
+        <c:choose> 
+            <c:when test="#{not empty sessionBean.user}"> 
+                <!-- If logged in --> 
+                #{facesContext.externalContext.response.sendRedirect('home.xhtml')} 
+            </c:when> 
+            <c:otherwise> 
+                <!-- If not logged in --> 
+                #{facesContext.externalContext.response.sendRedirect('login.xhtml')}                 
+            </c:otherwise> 
+        </c:choose> 
+        <!-- SESSION CHECK END --> 
     </h:body>
 </html>
 

@@ -3,7 +3,7 @@
 <!-- 
     @document   : profile.xhtml
     @created on : 25-may-2017, 22:55:00
-    @author     : Andreas Blume <bluman91>
+    @author     : Andreas Blume <bluman91> and Francisco Ruiz <pacorf>
 -->
 
 
@@ -144,6 +144,12 @@ ToDo:
             <% }%>
         -->
         <!-- ALERT SYSTEM END -->
+        <!-- SESSION CHECK BEGIN --> 
+        <c:if test="#{empty sessionBean.user}">
+            <!-- If not logged in -->
+            #{facesContext.externalContext.response.sendRedirect('login.xhtml')}
+        </c:if>
+        <!-- SESSION CHECK END --> 
         <div class="container" style="margin-bottom: 30px;">
             <c:choose>
                 <c:when test="#{empty userBean.profileUser}">
