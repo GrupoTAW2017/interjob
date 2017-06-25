@@ -8,8 +8,6 @@
 
 <!--
 ToDo:
- - alert system, are we need this in this page?
- - set correct styling of the logout link => link works only with form around
  - optimization: after ajax, render only friendList and alertSystem and not all => see: line 210
 -->
 
@@ -57,6 +55,21 @@ ToDo:
             }
             a.fa-instagram {
                 color: #bc2a8d;
+            }
+            
+            a.logoutLink {
+                color: #9d9d9d;
+                position: relative;
+                display: block;
+                line-height: 20px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+                text-decoration: none;
+            }
+            a.logoutLink:hover {
+                color: #fff;
+                background-color: transparent;
             }
         </style>
         <c:choose>
@@ -109,7 +122,7 @@ ToDo:
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <h:form>
-                                <h:commandLink action="#{logoutBean.doLogout}">Logout</h:commandLink>
+                                <h:commandLink action="#{logoutBean.doLogout}" styleClass="logoutLink">Logout</h:commandLink>
                             </h:form>
                         </li>
                     </ul>
