@@ -62,7 +62,13 @@ public class FriendsBean implements Serializable {
             }
         }
         else {
-            profileId = sessionBean.getUser().getId();
+            if(sessionBean.getUser() != null) { // check if an user is logged in
+                profileId = sessionBean.getUser().getId();
+            }
+            else {
+                this.user = null;
+                return;
+            }
         }
 
         // get user

@@ -135,6 +135,13 @@ ToDo:
         </div>
         <!-- ALERT SYSTEM END -->
         
+        <!-- SESSION CHECK BEGIN --> 
+        <c:if test="#{empty sessionBean.user}">
+            <!-- If not logged in -->
+            #{facesContext.externalContext.response.sendRedirect('login.xhtml')}
+        </c:if>
+        <!-- SESSION CHECK END -->
+        
         <div class="container" style="margin-bottom: 30px;" id="friendList">
             <c:choose>
                 <c:when test="#{empty userBean.profileUser}">
