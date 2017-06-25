@@ -19,11 +19,11 @@
         <c:choose> 
             <c:when test="#{not empty sessionBean.user}"> 
                 <!-- If logged in --> 
-                #{facesContext.externalContext.response.sendRedirect('home.xhtml')} 
+                #{facesContext.externalContext.response.sendRedirect('faces/home.xhtml')} 
             </c:when> 
             <c:otherwise> 
                 <!-- If not logged in --> 
-                #{facesContext.externalContext.response.sendRedirect('login.xhtml')}                 
+                #{facesContext.externalContext.response.sendRedirect('faces/login.xhtml')}                 
             </c:otherwise> 
         </c:choose> 
         <!-- SESSION CHECK END --> 
