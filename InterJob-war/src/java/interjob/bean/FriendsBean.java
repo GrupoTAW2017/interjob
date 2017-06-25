@@ -30,6 +30,9 @@ public class FriendsBean implements Serializable {
     private User user = null;
     private List<User> friends = null;
     
+    private boolean filter = false;
+    private String filterText = "Username";
+    
     @Inject
     private SessionBean sessionBean;
     
@@ -130,6 +133,29 @@ public class FriendsBean implements Serializable {
         this.friends = this.userFacade.getFriends(sessionBean.getUser().getId());
     }
     
+    public void setFilterText(String username) {
+        this.filter = true;
+        this.filterText = username;
+        this.friends.clear();
+
+        username = username.toLowerCase();
+        List<User> friendList = this.userFacade.getFriends(this.user.getId());
+        for(User friend : friendList) {
+            if(friend.getUsername().toLowerCase().contains(username))
+                this.friends.add(friend);
+        }
+    }
+    public String getFilterText() {
+        return this.filterText;
+    }
+    public Integer getUserId() {
+        return this.user.getId();
+    }
+    public void setUserId(Integer UserId) {
+        this.user = userFacade.findUserById(UserId);
+    }
+    
+    
     public User getUser() {
         return user;
     }
@@ -144,5 +170,9 @@ public class FriendsBean implements Serializable {
 
     public void setFriends(List<User> friends) {
         this.friends = friends;
+    }
+
+    public boolean getFilter() {
+        return filter;
     }
 }

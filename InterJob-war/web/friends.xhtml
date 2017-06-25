@@ -8,6 +8,7 @@
 
 <!--
 ToDo:
+ - add friend list filter also to the friend lists of other users
  - optimization: after ajax, render only friendList and alertSystem and not all => see: line 210
 -->
 
@@ -55,6 +56,10 @@ ToDo:
             }
             a.fa-instagram {
                 color: #bc2a8d;
+            }
+            
+            div#noFriends {
+                margin-top: 15px;
             }
             
             a.logoutLink {
@@ -169,7 +174,17 @@ ToDo:
                             <h2>Friends of #{friendsBean.user.username}</h2>
                         </c:otherwise>
                     </c:choose>
-                    <p><a href="#" class="btn btn-default">Search Friend</a></p>
+                    
+                    <!-- FRIEND LIST FILTER BEGIN --> 
+                    <h:form>
+                        <h:inputText id="userId" value="#{friendsBean.userId}" style="display: none"/>
+                        <h:inputText id="filterText" value="#{friendsBean.filterText}"/>
+                        <h:commandButton value="Filter" style="margin-left: 5px;">
+                            <f:ajax execute="userId filterText" render = "@all" />
+                        </h:commandButton>
+                    </h:form>
+                            <!-- FRIEND LIST FILTER END -->
+                    
                     <c:choose>
                         <c:when test="#{friendsBean.friends.size() gt 0}">
                             <h:dataTable value="#{friendsBean.friends}" var="friend" styleClass="table table-striped table-responsive">
@@ -188,10 +203,10 @@ ToDo:
                                 <h:column>
                                         <f:facet name="header">Social Media</f:facet>
                                         <c:if test="#{friend.twitter ne ''}">
-                                            <h:outputLink value="https://twitter.com/#{friend.twitter}" class="fa fa-twitter socialIcon"></h:outputLink>
+                                            <h:outputLink value="https://twitter.com/#{friend.twitter}" class="fa fa-twitter socialIcon" title="https://twitter.com/#{friend.twitter}"></h:outputLink>
                                         </c:if>
                                         <c:if test="#{friend.instagram ne ''}">
-                                            <h:outputLink value="https://instagram.com/#{friend.instagram}" class="fa fa-instagram socialIcon"></h:outputLink>
+                                            <h:outputLink value="https://instagram.com/#{friend.instagram}" class="fa fa-instagram socialIcon" title="https://instagram.com/#{friend.instagram}"></h:outputLink>
                                         </c:if>
                                 </h:column>
                                 <h:column>
@@ -234,15 +249,33 @@ ToDo:
                         </c:when>
                         <c:otherwise>
                             <c:choose>
-                                <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
-                                    <div id="noFriends">
-                                        Your friends list is empty. :(
-                                    </div>
+                                <c:when test="#{friendsBean.filter}">
+                                    <c:choose>
+                                        <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                            <div id="noFriends">
+                                                In your friend list is no user with the username: <b>#{friendsBean.filterText}</b>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div id="noFriends">
+                                                In the friends list of #{friendsBean.user.username} is no user with the username: <b>#{friendsBean.filterText}</b>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:when>
                                 <c:otherwise>
-                                    <div id="noFriends">
-                                        The friends list of the user #{friendsBean.user.username}  is empty. :(
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="#{friendsBean.user.id eq sessionBean.user.id}">
+                                            <div id="noFriends">
+                                                Your friends list is empty. :(
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div id="noFriends">
+                                                The friends list of #{friendsBean.user.username} is empty. :(
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:otherwise>
                             </c:choose>
                         </c:otherwise>
