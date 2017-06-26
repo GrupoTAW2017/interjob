@@ -141,22 +141,20 @@ ToDo:
         </nav>
         <!-- NAVBAR END -->
         <!-- ALERT SYSTEM -->
-        <!--
-            <%
-                if (error != null) {
-            %>
-                <div  class="alert alert-danger alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error:</strong> <%=error%>
-                </div>
-            <% } else if (info != null) {%>
-                <div class="alert alert-info alert-dismissable fade in container alert-system">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Info:</strong> <%=info%>
-                </div>
-            
-            <% }%>
-        -->
+        <div id="alertSystem">
+        <c:if test="#{not empty request.getAttribute('error')}">
+            <div class="alert alert-danger alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error:</strong> #{request.getAttribute("error")}
+            </div>
+        </c:if>
+        <c:if test="#{not empty request.getAttribute('info')}">
+            <div class="alert alert-success alert-dismissable fade in container alert-system">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                #{request.getAttribute("info")}
+            </div>
+        </c:if>
+        </div>
         <!-- ALERT SYSTEM END -->
         <!-- SESSION CHECK BEGIN --> 
         <c:if test="#{empty sessionBean.user}">
@@ -315,8 +313,8 @@ ToDo:
                                 </table>
                                 <c:choose>
                                     <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
-                                        <a href="#" class="btn btn-default" role="button">Edit Profile</a>
-                                        <a href="#" class="btn btn-default" role="button">Change Password</a>
+                                        <a href="profileedit.xhtml" class="btn btn-default" role="button">Edit Profile</a>
+                                        <a href="passwordedit.xhtml" class="btn btn-default" role="button">Change Password</a>
                                     </c:when>
                                     <c:otherwise>
                                         <a href="#{request.contextPath}/faces/friends.xhtml?id=#{userBean.profileUser.id}" class="btn btn-default" role="button">Show his/her Friends</a>
