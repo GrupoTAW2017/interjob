@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <!-- BOOTSTRAP REQUIRED STYLESHEETS AND JS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <style>
+            body {
+                padding-top: 50px;
+            }
+            a.logoutLink {
+                color: #9d9d9d;
+                position: relative;
+                display: block;
+                line-height: 20px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+                text-decoration: none;
+            }
+            a.logoutLink:hover {
+                color: #fff;
+                background-color: transparent;
+            }
+        </style>
+        <!-- BOOTSTRAP END -->
+
+
+        <title>Edit Profile</title>
+    </h:head>
+    <h:body>
+        <!-- NAVBAR BEGIN -->
+        <nav class="navbar navbar-inverse navbar-fixed-top"> <!-- THIS NAV IS THE TOP NAVBAR -->
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#{request.contextPath}">InterJob</a> <!-- NAVBAR TITLE AND LINK TO MAIN -->
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav"> <!-- ELEMENTS IN NAVIGATION BAR -->
+                        <li>
+                            <a href="#{request.contextPath}/faces/home.xhtml">Home</a>
+                        </li>
+                        <c:choose>
+                            <c:when test="#{userBean.profileUser.id eq sessionBean.user.id}">
+                                <li class="active">
+                                    <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="#{request.contextPath}/faces/profile.xhtml">My Profile</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>>
+                        <li>
+                            <a href="#{request.contextPath}/faces/friends.xhtml">Friends</a>
+                        </li>
+                        <li>
+                            <a href="#">EXAMPLE</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <h:form>
+                                <h:commandLink action="#{logoutBean.doLogout}" styleClass="logoutLink">Logout</h:commandLink>
+                            </h:form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- NAVBAR END -->
+        <!-- SESSION CHECK BEGIN --> 
+        <c:if test="#{empty sessionBean.user}">
+            <!-- If not logged in -->
+            #{facesContext.externalContext.response.sendRedirect('login.xhtml')}
+        </c:if>
+        <!-- SESSION CHECK END --> 
+        
+        <!-- If logged in user and profile user don't match, redirect to 
+            profile.xhtml. (this is used so other users cannot modify other
+            profiles) -->
+        <c:if test="#{sessionBean.user ne userBean.profileUser}">
+            #{facesContext.externalContext.response.sendRedirect('profile.xhtml')}
+        </c:if>
+        
+
+        <div class="container">
+            <h2>Edit Profile</h2>
+            <h:form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.username}" required="true" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.name}" required="true" />
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.lastName}" required="true" />
+                </div>
+                <div class="form-group">
+                    <label for="twitter">Twitter</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.twitter}" />
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.instagram}" />
+                </div>
+                <div class="form-group">
+                    <label for="webpage">Webpage</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.webpage}" />
+                </div>
+                <div class="form-group">
+                    <label for="foto">Photo URL</label>
+                    <h:inputText styleClass="form-control" value="#{profileBean.profileUser.foto}" />
+                </div>
+                <h:commandButton styleClass="btn btn-default" value="Cancel" action="profile.xhtml" /> 
+                <h:commandButton styleClass="btn btn-default" value="Save" action="#{profileBean.doUpdateProfile()}" />
+            </h:form>
+        </div>
+    </h:body>
+</html>
+
