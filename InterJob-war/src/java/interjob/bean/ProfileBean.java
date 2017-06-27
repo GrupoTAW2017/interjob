@@ -9,21 +9,21 @@ import interJob.ejb.UserFacade;
 import interJob.entity.User;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 /**
  *
- * @author Aelillo
+ * @author Francisco Ruiz <pacorf>
  */
 @Named(value = "profileBean")
-@Dependent
+@RequestScoped
 public class ProfileBean {
 
     @EJB
-    UserFacade userFacade;
+    private UserFacade userFacade;
 
     @Inject
     SessionBean sessionBean;
@@ -32,9 +32,9 @@ public class ProfileBean {
     private User profileUser;
 
     // Variables for Password Editor
-    private String oldPassword;
-    private String newPassword;
-    private String newPasswordRepeat;
+    private String oldPassword = "";
+    private String newPassword = "";
+    private String newPasswordRepeat = "";
 
     @PostConstruct
     public void init() {
@@ -96,8 +96,12 @@ public class ProfileBean {
      * @return Response URL
      */
     public String doUpdatePassword() {
-        //TODO: Finish doUpdatePassword()
+        
+        // Variable used for storing the session's user
+        User sessionUser;
+        
         if (!isUserLoggedOn()) return "login";
+        sessionUser = sessionBean.getUser();
         
         if (this.oldPassword==null || this.newPassword==null || this.newPasswordRepeat==null) {
             String error = "Fields cannot be empty! " + this.oldPassword + this.newPassword + this.newPasswordRepeat;
@@ -105,12 +109,13 @@ public class ProfileBean {
             return null;
         }
         
-        if (sessionBean.user.getPassword().equals(oldPassword)) { // check old password
+        
+        if (sessionUser.getPassword().equals(oldPassword)) { // check old password
                 if (newPassword.equals(newPasswordRepeat)) { // check new password
-                    if (!sessionBean.user.getPassword().equals(newPassword)) { // check if old and new password do not match
+                    if (!sessionUser.getPassword().equals(newPassword)) { // check if old and new password do not match
                         // SUCCESS
-                        sessionBean.user.setPassword(newPassword);
-                        userFacade.edit(sessionBean.user);
+                        sessionUser.setPassword(newPassword);
+                        userFacade.edit(sessionUser);
                         String info = "Password changed sucessfully!";
                         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("info", info);
                         return "profile";
@@ -126,14 +131,14 @@ public class ProfileBean {
                 String error = "Old password do not match.";
                 FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
             }
-        return null;
+        return "passwordedit";
     }
     
     /**
      * Checks if user is logged in.
      */
     private boolean isUserLoggedOn () {
-        if (sessionBean.user == null) {
+        if (sessionBean.getUser() != null) {
             return true;
         }
         return false;
