@@ -23,7 +23,7 @@ import javax.inject.Inject;
 public class ProfileBean {
 
     @EJB
-    private UserFacade userFacade;
+    UserFacade userFacade;
 
     @Inject
     SessionBean sessionBean;
@@ -40,7 +40,7 @@ public class ProfileBean {
     public void init() {
         //TODO: Load form
     }
-    
+
     /**
      * Creates a new instance of ProfileBean
      */
@@ -71,7 +71,9 @@ public class ProfileBean {
         this.newPasswordRepeat = newPasswordRepeat;
     }
 
+    // gets profile from session's user
     public User getProfileUser() {
+        this.profileUser = sessionBean.getUser();
         return profileUser;
     }
 
@@ -85,9 +87,32 @@ public class ProfileBean {
      * @return Response URL
      */
     public String doUpdateProfile() {
-        //TODO: Finish doUpdateProfile()
+        boolean anyError = false;
 
-        return null;
+        String error = "";
+
+        if (profileUser.getUsername().isEmpty()) {
+            anyError = true;
+            error += "<br>Username cannot be empty!";
+        }
+        if (profileUser.getName().isEmpty()) {
+            anyError = true;
+            error += "<br>Name cannot be empty!";
+        }
+        if (profileUser.getLastName().isEmpty()) {
+            anyError = true;
+            error += "<br>Last Name cannot be empty!";
+        }
+
+        if (anyError) {
+            FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
+            return "passwordedit";
+        } else { // SUCCESS
+            userFacade.edit(profileUser); // UPDATE PROFILE INFORMATION
+            String info = "Profile saved successfully!";
+            FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("info", info);
+            return "profile";
+        }
     }
 
     /**
@@ -96,44 +121,44 @@ public class ProfileBean {
      * @return Response URL
      */
     public String doUpdatePassword() {
-        
+
         // Variable used for storing the session's user
         User sessionUser;
-        
+
         if (!isUserLoggedOn()) return "login";
         sessionUser = sessionBean.getUser();
-        
+
         if (this.oldPassword==null || this.newPassword==null || this.newPasswordRepeat==null) {
             String error = "Fields cannot be empty! " + this.oldPassword + this.newPassword + this.newPasswordRepeat;
             FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
             return null;
         }
-        
+
         
         if (sessionUser.getPassword().equals(oldPassword)) { // check old password
-                if (newPassword.equals(newPasswordRepeat)) { // check new password
-                    if (!sessionUser.getPassword().equals(newPassword)) { // check if old and new password do not match
-                        // SUCCESS
-                        sessionUser.setPassword(newPassword);
-                        userFacade.edit(sessionUser);
-                        String info = "Password changed sucessfully!";
-                        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("info", info);
-                        return "profile";
-                    } else {
-                        String error = "New password must be different from the old one.";
-                        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
-                    }
+            if (newPassword.equals(newPasswordRepeat)) { // check new password
+                if (!sessionUser.getPassword().equals(newPassword)) { // check if old and new password do not match
+                    // SUCCESS
+                    sessionUser.setPassword(newPassword);
+                    userFacade.edit(sessionUser);
+                    String info = "Password changed sucessfully!";
+                    FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("info", info);
+                    return "profile";
                 } else {
-                    String error = "New passwords typed do not match.";
+                    String error = "New password must be different from the old one.";
                     FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
                 }
             } else {
-                String error = "Old password do not match.";
+                String error = "New passwords typed do not match.";
                 FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
             }
+        } else {
+            String error = "Old password do not match.";
+            FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("error", error);
+        }
         return "passwordedit";
     }
-    
+
     /**
      * Checks if user is logged in.
      */
