@@ -7,7 +7,6 @@ package interjob.bean;
 
 import interJob.ejb.UserFacade;
 import interJob.entity.User;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -35,11 +34,6 @@ public class ProfileBean {
     private String oldPassword = "";
     private String newPassword = "";
     private String newPasswordRepeat = "";
-
-    @PostConstruct
-    public void init() {
-        //TODO: Load form
-    }
 
     /**
      * Creates a new instance of ProfileBean

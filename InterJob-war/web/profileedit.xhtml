@@ -13,6 +13,9 @@
             body {
                 padding-top: 50px;
             }
+            .btn-primary {
+                margin-right: 5px;
+            }
             a.logoutLink {
                 color: #9d9d9d;
                 position: relative;
@@ -127,8 +130,8 @@
                     <label for="foto">Photo URL</label>
                     <h:inputText styleClass="form-control" value="#{profileBean.profileUser.foto}" />
                 </div>
+                <h:commandButton styleClass="btn btn-primary" value="Save" action="#{profileBean.doUpdateProfile()}" />
                 <h:commandButton styleClass="btn btn-default" value="Cancel" action="profile.xhtml" /> 
-                <h:commandButton styleClass="btn btn-default" value="Save" action="#{profileBean.doUpdateProfile()}" />
             </h:form>
         </div>
     </h:body>
